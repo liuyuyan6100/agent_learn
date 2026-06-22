@@ -9,7 +9,10 @@ const leakPatterns = [
   { label: "api key", pattern: /\b(sk-[A-Za-z0-9_-]{12,}|OPENAI_API_KEY|ANTHROPIC_API_KEY|api[_-]?key\s*[=:])/i },
   { label: "local path", pattern: /(\/home\/|\/Users\/|[A-Z]:\\|\.config\/)/ },
   { label: "session path key", pattern: /["']sessionPath["']|["']workspacePath["']/ },
-  { label: "raw prompt key", pattern: /["']rawPrompt["']/ }
+  { label: "raw prompt key", pattern: /["']rawPrompt["']/ },
+  { label: "raw scrape key", pattern: /["']rawScrape["']|["']raw_scrape["']/ },
+  { label: "private interview key", pattern: /["']privateInterviewDetail["']|["']private_interview_detail["']/ },
+  { label: "cookie artifact", pattern: /document\.cookie|Set-Cookie:|["']cookie["']\s*:/i }
 ];
 
 const files = scanRoots.flatMap((scanRoot) => collectPublicFiles(join(root, scanRoot)));

@@ -8,7 +8,7 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
-    "validate:data": "tsx scripts/validate-token-usage.ts",
+    "validate:data": "tsx scripts/validate-token-usage.ts && tsx scripts/validate-agent-signals.ts",
     "collect:tokens": "tsx scripts/collect-token-usage.ts",
     "refresh:tokens": "bash scripts/refresh-token-dashboard.sh",
     "scan:public": "tsx scripts/scan-public-artifacts.ts",

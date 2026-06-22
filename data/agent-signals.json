@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-22T10:30:00.000Z",
+  "period": {
+    "start": "2026-06-17",
+    "end": "2026-06-22",
+    "timezone": "Asia/Shanghai"
+  },
+  "source": {
+    "mode": "manual_reviewed",
+    "containsRawScrapes": false,
+    "containsPrivateInterviewDetails": false,
+    "containsLocalPaths": false
+  },
+  "privacy": {
+    "publicUrlsOnly": true,
+    "redactedFields": [
+      "account",
+      "email",
+      "apiKey",
+      "organizationId",
+      "rawPrompt",
+      "rawScrape",
+      "html",
+      "cookie",
+      "sessionPath",
+      "workspacePath",
+      "internalProject",
+      "privateInterviewDetail"
+    ]
+  },
+  "signals": [
+    {
+      "id": "2026-06-22-agent-patterns",
+      "date": "2026-06-22",
+      "sourceType": "article",
+      "sourceName": "Anthropic Engineering",
+      "title": "Building effective agents",
+      "url": "https://www.anthropic.com/engineering/building-effective-agents",
+      "summary": "A public engineering article frames agents as systems that combine model calls, tools, workflow control and feedback loops.",
+      "capabilityTags": ["tool_calling", "workflow_orchestration", "system_design"],
+      "requirements": [
+        "Choose simple workflow patterns before adding open-ended agent autonomy.",
+        "Make tool boundaries and failure handling explicit in the system design."
+      ],
+      "currentGap": "Need a public workflow example that shows when a fixed workflow is enough and when an agent loop is justified.",
+      "nextAction": "Use the first Agent Signals page to track workflow patterns and link them to future experiments.",
+      "status": "in_progress"
+    },
+    {
+      "id": "2026-06-21-mcp-interfaces",
+      "date": "2026-06-21",
+      "sourceType": "product",
+      "sourceName": "Model Context Protocol",
+      "title": "MCP turns tool access into a stable agent interface",
+      "url": "https://modelcontextprotocol.io/introduction",
+      "summary": "MCP documentation makes a strong case for standardizing how agents discover tools, data sources and execution context.",
+      "capabilityTags": ["mcp", "tool_calling", "integration"],
+      "requirements": [
+        "Understand how agent tools are described, authorized and invoked across clients.",
+        "Design integrations with a contract that can survive tool and client changes."
+      ],
+      "currentGap": "Need a small documented MCP-style integration example or comparison against current CLI automation.",
+      "nextAction": "Add MCP to the experience map after the signals module is live.",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-20-coding-agent-evals",
+      "date": "2026-06-20",
+      "sourceType": "manual",
+      "sourceName": "Manual note",
+      "title": "Coding agents need repeatable evaluation, not only demos",
+      "url": null,
+      "summary": "Recent coding-agent practice suggests that visible productivity gains need a repeatable eval loop to stay trustworthy.",
+      "capabilityTags": ["evals", "agentic_coding", "observability"],
+      "requirements": [
+        "Define small task suites that can be rerun after model, prompt or tool changes.",
+        "Record failure modes in a structured format that can feed later improvements."
+      ],
+      "currentGap": "Token telemetry is live, but there is not yet a public eval record connected to the dashboard.",
+      "nextAction": "Design a minimal eval JSON contract after Agent Signals reaches MVP.",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-19-openai-agent-tools",
+      "date": "2026-06-19",
+      "sourceType": "product",
+      "sourceName": "OpenAI",
+      "title": "Agent platforms are converging on tools, tracing and deployable workflows",
+      "url": "https://openai.com/index/new-tools-for-building-agents/",
+      "summary": "Public product updates around agent building emphasize hosted tools, orchestration, tracing and deployment paths.",
+      "capabilityTags": ["tool_calling", "observability", "deployment"],
+      "requirements": [
+        "Treat tracing and inspection as core agent engineering features.",
+        "Separate prototype prompts from deployable workflow contracts."
+      ],
+      "currentGap": "The dashboard shows token telemetry, but not yet workflow traces or deployment notes.",
+      "nextAction": "Keep observability as a recurring capability tag and connect it to future project notes.",
+      "status": "in_progress"
+    },
+    {
+      "id": "2026-06-18-autogen-multi-agent",
+      "date": "2026-06-18",
+      "sourceType": "open_source",
+      "sourceName": "Microsoft AutoGen",
+      "title": "Multi-agent frameworks need clear role boundaries",
+      "url": "https://github.com/microsoft/autogen",
+      "summary": "Open-source multi-agent frameworks show how quickly coordination, role design and observability become system concerns.",
+      "capabilityTags": ["multi_agent", "workflow_orchestration", "observability"],
+      "requirements": [
+        "Model agent roles and handoffs explicitly instead of relying on implicit chat flow.",
+        "Log enough state to debug coordination failures."
+      ],
+      "currentGap": "Need one public comparison between a single-agent workflow and a multi-agent workflow.",
+      "nextAction": "Track multi-agent examples as signals before deciding whether to build a demo.",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-17-agent-engineer-job-signals",
+      "date": "2026-06-17",
+      "sourceType": "job",
+      "sourceName": "Public job-posting review",
+      "title": "Agent engineer roles ask for productized automation and evaluation",
+      "url": null,
+      "summary": "Public role descriptions repeatedly connect LLM agents with tool integration, workflow automation, evaluation and deployment ownership.",
+      "capabilityTags": ["workflow_orchestration", "evals", "deployment"],
+      "requirements": [
+        "Show deployed systems rather than isolated prompts.",
+        "Explain data flow, privacy boundaries and operational failure modes."
+      ],
+      "currentGap": "The public dashboard has deployment and token telemetry, but needs a visible learning-signal loop.",
+      "nextAction": "Ship the Agent Signals module as the next proof point.",
+      "status": "in_progress"
+    }
+  ]
+}

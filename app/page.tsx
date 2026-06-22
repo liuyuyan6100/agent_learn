@@ -1,8 +1,12 @@
+import agentSignalsData from "../data/agent-signals.json";
 import tokenUsageData from "../data/token-usage.json";
+import { AgentSignalsSummary } from "@/src/components/agent-signals-summary";
 import { TokenUsageDashboard } from "@/src/components/token-usage-dashboard";
+import { assertAgentSignalsDataset } from "@/src/lib/agent-signals";
 import { assertTokenUsageDataset, formatDateLabel, formatTokenCount } from "@/src/lib/token-usage";
 
 export default function Home() {
+  const agentSignals = assertAgentSignalsDataset(agentSignalsData);
   const tokenUsage = assertTokenUsageDataset(tokenUsageData);
 
   return (
@@ -49,6 +53,8 @@ export default function Home() {
           <p>后续可以把使用峰值关联到文章、实验记录和 Agent 方向日报，形成持续复盘链路。</p>
         </article>
       </section>
+
+      <AgentSignalsSummary dataset={agentSignals} />
 
       <TokenUsageDashboard dataset={tokenUsage} />
     </main>

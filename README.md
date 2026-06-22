@@ -10,8 +10,9 @@ Public URL: https://agent.aiclawonline.website/
 
 - Next.js + TypeScript app using the App Router.
 - Token usage dashboard backed by `data/token-usage.json`.
+- Agent Signals module backed by `data/agent-signals.json`, with a homepage summary and `/signals` list page.
 - Public `modelName` display with client names reduced to `clientCategory`.
-- Schema, arithmetic and privacy validation for public token data.
+- Schema, arithmetic and privacy validation for public token and Agent Signals data.
 - `tokscale` collector script that refuses to overwrite valid data on invalid CLI output.
 - Manual and scheduled refresh path for token collection, build, deploy sync, and service restart.
 - Deployed behind Cloudflare and an Nginx reverse proxy.
@@ -24,6 +25,8 @@ npm run verify
 npm run collect:tokens
 npm run refresh:tokens
 ```
+
+`npm run validate:data` validates both public JSON datasets: token usage and Agent Signals.
 
 `npm run collect:tokens` defaults to an all-time collection window, uses `Asia/Shanghai` for the collection date label, and stores the first real usage date in `data/token-usage.json`.
 
