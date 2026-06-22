@@ -1,0 +1,11 @@
+[Unit]
+Description=Run Agent Learn token dashboard refresh hourly
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+RandomizedDelaySec=5m
+Unit=agent-learn-refresh.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,2 @@
+ubuntu ALL=(root) NOPASSWD: /usr/bin/systemctl start --no-block agent-learn-refresh.service
+ubuntu ALL=(root) NOPASSWD: /usr/bin/systemctl restart agent-learn.service

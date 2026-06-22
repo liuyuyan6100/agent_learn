@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import { collectTokenUsageToFileFromOutputs } from "../src/lib/tokscale-collector";
 
 const DEFAULT_SINCE = "1970-01-01";
+const DEFAULT_TIMEZONE = "Asia/Shanghai";
 
 interface CliArgs {
   since: string;
@@ -45,13 +46,14 @@ function runNpx(command: string[]): string {
 
 function parseArgs(rawArgs: string[]): CliArgs {
   const today = new Date();
-  const until = toDate(today);
+  const timezone = readArg(rawArgs, "--timezone") ?? DEFAULT_TIMEZONE;
+  const until = readArg(rawArgs, "--until") ?? toDateInTimeZone(today, timezone);
 
   const parsed: CliArgs = {
     since: DEFAULT_SINCE,
     until,
     out: "data/token-usage.json",
-    timezone: "Etc/UTC"
+    timezone
   };
 
   for (let index = 0; index < rawArgs.length; index += 1) {
@@ -75,6 +77,27 @@ function parseArgs(rawArgs: string[]): CliArgs {
   return parsed;
 }
 
-function toDate(value: Date): string {
-  return value.toISOString().slice(0, 10);
+function readArg(rawArgs: string[], name: string): string | null {
+  const index = rawArgs.indexOf(name);
+  const value = rawArgs[index + 1];
+  return index === -1 || !value ? null : value;
+}
+
+function toDateInTimeZone(value: Date, timeZone: string): string {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    day: "2-digit",
+    month: "2-digit",
+    timeZone,
+    year: "numeric"
+  }).formatToParts(value);
+  const partMap = new Map(parts.map((part) => [part.type, part.value]));
+  const year = partMap.get("year");
+  const month = partMap.get("month");
+  const day = partMap.get("day");
+
+  if (!year || !month || !day) {
+    throw new Error(`Unable to format date for timezone ${timeZone}`);
+  }
+
+  return `${year}-${month}-${day}`;
 }

@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-22T05:21:07.814Z",
+  "generatedAt": "2026-06-22T09:01:52.262Z",
   "period": {
     "start": "2026-04-12",
     "end": "2026-06-22",
-    "timezone": "Etc/UTC"
+    "timezone": "Asia/Shanghai"
   },
   "source": {
     "tool": "tokscale",
@@ -28,35 +28,35 @@
     ]
   },
   "totals": {
-    "totalTokens": 2186881750,
-    "directTokens": 66235669,
-    "cacheTokens": 2120646081,
-    "inputTokens": 53155247,
-    "outputTokens": 12876602,
-    "cacheReadTokens": 2053953164,
+    "totalTokens": 2196820087,
+    "directTokens": 67509430,
+    "cacheTokens": 2129310657,
+    "inputTokens": 54287525,
+    "outputTokens": 12981425,
+    "cacheReadTokens": 2062617740,
     "cacheWriteTokens": 66692917,
-    "reasoningTokens": 203820,
-    "messageCount": 31051,
+    "reasoningTokens": 240480,
+    "messageCount": 31254,
     "activeDays": 61,
     "totalDays": 61,
     "totalCostUsd": null
   },
   "windows": {
     "today": {
-      "totalTokens": 19100637,
-      "directTokens": 1722077,
-      "messageCount": 324
+      "totalTokens": 29038974,
+      "directTokens": 2995838,
+      "messageCount": 527
     },
     "last7Days": {
-      "totalTokens": 100292901,
-      "directTokens": 7431141,
-      "messageCount": 1190,
+      "totalTokens": 110231238,
+      "directTokens": 8704902,
+      "messageCount": 1393,
       "activeDays": 7
     },
     "last30Days": {
-      "totalTokens": 826265956,
-      "directTokens": 19626235,
-      "messageCount": 6408,
+      "totalTokens": 836204293,
+      "directTokens": 20899996,
+      "messageCount": 6611,
       "activeDays": 30
     }
   },
@@ -105,9 +105,9 @@
       "modelName": "gpt-5.5",
       "modelProvider": "OpenAI",
       "modelCategory": "frontier_reasoning",
-      "totalTokens": 79852715,
-      "directTokens": 7117995,
-      "messageCount": 970
+      "totalTokens": 89791052,
+      "directTokens": 8391756,
+      "messageCount": 1173
     },
     {
       "modelName": "gpt-5.4",
@@ -413,21 +413,21 @@
       "breakdown": [
         {
           "clientCategory": "other_agent_tool",
-          "modelName": "xiaomi/mimo-v2-pro",
-          "modelProvider": "nous",
-          "modelCategory": "unknown",
-          "totalTokens": 2793392,
-          "directTokens": 287920,
-          "messageCount": 118
-        },
-        {
-          "clientCategory": "other_agent_tool",
           "modelName": "arcee-ai/trinity-large-preview:free",
           "modelProvider": "openrouter",
           "modelCategory": "unknown",
           "totalTokens": 4830178,
           "directTokens": 2744738,
           "messageCount": 980
+        },
+        {
+          "clientCategory": "other_agent_tool",
+          "modelName": "xiaomi/mimo-v2-pro",
+          "modelProvider": "nous",
+          "modelCategory": "unknown",
+          "totalTokens": 2793392,
+          "directTokens": 287920,
+          "messageCount": 118
         },
         {
           "clientCategory": "other_agent_tool",
@@ -456,21 +456,21 @@
       "breakdown": [
         {
           "clientCategory": "other_agent_tool",
-          "modelName": "gpt-5.4",
-          "modelProvider": "wbz",
-          "modelCategory": "frontier_reasoning",
-          "totalTokens": 753837,
-          "directTokens": 38829,
-          "messageCount": 71
-        },
-        {
-          "clientCategory": "other_agent_tool",
           "modelName": "xiaomi/mimo-v2-pro",
           "modelProvider": "nous",
           "modelCategory": "unknown",
           "totalTokens": 3806321,
           "directTokens": 299377,
           "messageCount": 259
+        },
+        {
+          "clientCategory": "other_agent_tool",
+          "modelName": "gpt-5.4",
+          "modelProvider": "wbz",
+          "modelCategory": "frontier_reasoning",
+          "totalTokens": 753837,
+          "directTokens": 38829,
+          "messageCount": 71
         }
       ]
     },
@@ -499,21 +499,21 @@
         },
         {
           "clientCategory": "other_agent_tool",
-          "modelName": "claude-opus-4-7",
-          "modelProvider": "wbz",
-          "modelCategory": "frontier_coding",
-          "totalTokens": 1067310,
-          "directTokens": 172718,
-          "messageCount": 60
-        },
-        {
-          "clientCategory": "other_agent_tool",
           "modelName": "gpt-5.4",
           "modelProvider": "custom, wbz",
           "modelCategory": "frontier_reasoning",
           "totalTokens": 14373057,
           "directTokens": 1532481,
           "messageCount": 690
+        },
+        {
+          "clientCategory": "other_agent_tool",
+          "modelName": "claude-opus-4-7",
+          "modelProvider": "wbz",
+          "modelCategory": "frontier_coding",
+          "totalTokens": 1067310,
+          "directTokens": 172718,
+          "messageCount": 60
         }
       ]
     },
@@ -533,21 +533,21 @@
       "breakdown": [
         {
           "clientCategory": "other_agent_tool",
-          "modelName": "gpt-5.4",
-          "modelProvider": "custom, nous, wbz",
-          "modelCategory": "frontier_reasoning",
-          "totalTokens": 14808341,
-          "directTokens": 1968917,
-          "messageCount": 759
-        },
-        {
-          "clientCategory": "other_agent_tool",
           "modelName": "xiaomi/mimo-v2-pro",
           "modelProvider": "nous, wbz",
           "modelCategory": "unknown",
           "totalTokens": 15841652,
           "directTokens": 476916,
           "messageCount": 562
+        },
+        {
+          "clientCategory": "other_agent_tool",
+          "modelName": "gpt-5.4",
+          "modelProvider": "custom, nous, wbz",
+          "modelCategory": "frontier_reasoning",
+          "totalTokens": 14808341,
+          "directTokens": 1968917,
+          "messageCount": 759
         }
       ]
     },
@@ -567,6 +567,15 @@
       "breakdown": [
         {
           "clientCategory": "other_agent_tool",
+          "modelName": "gpt-5.4",
+          "modelProvider": "custom",
+          "modelCategory": "frontier_reasoning",
+          "totalTokens": 13462455,
+          "directTokens": 1025207,
+          "messageCount": 722
+        },
+        {
+          "clientCategory": "other_agent_tool",
           "modelName": "moonshotai/kimi-k2.6",
           "modelProvider": "nous, wbz",
           "modelCategory": "unknown",
@@ -582,15 +591,6 @@
           "totalTokens": 67776,
           "directTokens": 63680,
           "messageCount": 12
-        },
-        {
-          "clientCategory": "other_agent_tool",
-          "modelName": "gpt-5.4",
-          "modelProvider": "custom",
-          "modelCategory": "frontier_reasoning",
-          "totalTokens": 13462455,
-          "directTokens": 1025207,
-          "messageCount": 722
         }
       ]
     },
@@ -619,30 +619,12 @@
         },
         {
           "clientCategory": "other_agent_tool",
-          "modelName": "gemma3:4b",
-          "modelProvider": "wbz",
+          "modelName": "moonshotai/kimi-k2.6",
+          "modelProvider": "custom, nous",
           "modelCategory": "unknown",
-          "totalTokens": 21368,
-          "directTokens": 21368,
-          "messageCount": 2
-        },
-        {
-          "clientCategory": "other_agent_tool",
-          "modelName": "gpt-oss-120b",
-          "modelProvider": "wbz",
-          "modelCategory": "unknown",
-          "totalTokens": 43517,
-          "directTokens": 41981,
-          "messageCount": 4
-        },
-        {
-          "clientCategory": "other_agent_tool",
-          "modelName": "qwen3.5",
-          "modelProvider": "ollama_cloud",
-          "modelCategory": "unknown",
-          "totalTokens": 25359,
-          "directTokens": 25359,
-          "messageCount": 2
+          "totalTokens": 52029427,
+          "directTokens": 2401350,
+          "messageCount": 1957
         },
         {
           "clientCategory": "other_agent_tool",
@@ -655,12 +637,30 @@
         },
         {
           "clientCategory": "other_agent_tool",
-          "modelName": "moonshotai/kimi-k2.6",
-          "modelProvider": "custom, nous",
+          "modelName": "gemma3:4b",
+          "modelProvider": "wbz",
           "modelCategory": "unknown",
-          "totalTokens": 52029427,
-          "directTokens": 2401350,
-          "messageCount": 1957
+          "totalTokens": 21368,
+          "directTokens": 21368,
+          "messageCount": 2
+        },
+        {
+          "clientCategory": "other_agent_tool",
+          "modelName": "qwen3.5",
+          "modelProvider": "ollama_cloud",
+          "modelCategory": "unknown",
+          "totalTokens": 25359,
+          "directTokens": 25359,
+          "messageCount": 2
+        },
+        {
+          "clientCategory": "other_agent_tool",
+          "modelName": "gpt-oss-120b",
+          "modelProvider": "wbz",
+          "modelCategory": "unknown",
+          "totalTokens": 43517,
+          "directTokens": 41981,
+          "messageCount": 4
         }
       ]
     },
@@ -730,12 +730,12 @@
       "breakdown": [
         {
           "clientCategory": "other_agent_tool",
-          "modelName": "gpt-5.4",
-          "modelProvider": "custom",
-          "modelCategory": "frontier_reasoning",
-          "totalTokens": 1243243,
-          "directTokens": 222315,
-          "messageCount": 62
+          "modelName": "deepseek-v4-pro",
+          "modelProvider": "deepseek",
+          "modelCategory": "unknown",
+          "totalTokens": 20998904,
+          "directTokens": 582520,
+          "messageCount": 521
         },
         {
           "clientCategory": "other_agent_tool",
@@ -748,15 +748,6 @@
         },
         {
           "clientCategory": "other_agent_tool",
-          "modelName": "qwen3.5",
-          "modelProvider": "ollama_cloud",
-          "modelCategory": "unknown",
-          "totalTokens": 2686509,
-          "directTokens": 2655469,
-          "messageCount": 247
-        },
-        {
-          "clientCategory": "other_agent_tool",
           "modelName": "deepseek-v4-flash",
           "modelProvider": "deepseek",
           "modelCategory": "unknown",
@@ -766,12 +757,21 @@
         },
         {
           "clientCategory": "other_agent_tool",
-          "modelName": "deepseek-v4-pro",
-          "modelProvider": "deepseek",
+          "modelName": "qwen3.5",
+          "modelProvider": "ollama_cloud",
           "modelCategory": "unknown",
-          "totalTokens": 20998904,
-          "directTokens": 582520,
-          "messageCount": 521
+          "totalTokens": 2686509,
+          "directTokens": 2655469,
+          "messageCount": 247
+        },
+        {
+          "clientCategory": "other_agent_tool",
+          "modelName": "gpt-5.4",
+          "modelProvider": "custom",
+          "modelCategory": "frontier_reasoning",
+          "totalTokens": 1243243,
+          "directTokens": 222315,
+          "messageCount": 62
         }
       ]
     },
@@ -825,6 +825,15 @@
       "breakdown": [
         {
           "clientCategory": "other_agent_tool",
+          "modelName": "gpt-5.5",
+          "modelProvider": "custom",
+          "modelCategory": "frontier_reasoning",
+          "totalTokens": 146270,
+          "directTokens": 119134,
+          "messageCount": 10
+        },
+        {
+          "clientCategory": "other_agent_tool",
           "modelName": "gpt-5.4",
           "modelProvider": "custom",
           "modelCategory": "frontier_reasoning",
@@ -849,15 +858,6 @@
           "totalTokens": 62020,
           "directTokens": 38468,
           "messageCount": 6
-        },
-        {
-          "clientCategory": "other_agent_tool",
-          "modelName": "gpt-5.5",
-          "modelProvider": "custom",
-          "modelCategory": "frontier_reasoning",
-          "totalTokens": 146270,
-          "directTokens": 119134,
-          "messageCount": 10
         }
       ]
     },
@@ -952,21 +952,21 @@
       "breakdown": [
         {
           "clientCategory": "other_agent_tool",
-          "modelName": "gpt-5.4",
-          "modelProvider": "custom",
-          "modelCategory": "frontier_reasoning",
-          "totalTokens": 218830,
-          "directTokens": 164046,
-          "messageCount": 23
-        },
-        {
-          "clientCategory": "other_agent_tool",
           "modelName": "gpt-oss:120b",
           "modelProvider": "ollama_cloud",
           "modelCategory": "unknown",
           "totalTokens": 21776,
           "directTokens": 21776,
           "messageCount": 2
+        },
+        {
+          "clientCategory": "other_agent_tool",
+          "modelName": "gpt-5.4",
+          "modelProvider": "custom",
+          "modelCategory": "frontier_reasoning",
+          "totalTokens": 218830,
+          "directTokens": 164046,
+          "messageCount": 23
         }
       ]
     },
@@ -1036,21 +1036,21 @@
       "breakdown": [
         {
           "clientCategory": "coding_agent",
-          "modelName": "gpt-5.4",
-          "modelProvider": "openai",
-          "modelCategory": "frontier_reasoning",
-          "totalTokens": 978302,
-          "directTokens": 238974,
-          "messageCount": 94
-        },
-        {
-          "clientCategory": "coding_agent",
           "modelName": "claude-opus-4-7",
           "modelProvider": "anthropic",
           "modelCategory": "frontier_coding",
           "totalTokens": 40432253,
           "directTokens": 144537,
           "messageCount": 218
+        },
+        {
+          "clientCategory": "coding_agent",
+          "modelName": "gpt-5.4",
+          "modelProvider": "openai",
+          "modelCategory": "frontier_reasoning",
+          "totalTokens": 978302,
+          "directTokens": 238974,
+          "messageCount": 94
         }
       ]
     },
@@ -1187,15 +1187,6 @@
       "intensity": 2,
       "breakdown": [
         {
-          "clientCategory": "other_agent_tool",
-          "modelName": "deepseek/deepseek-v4-flash",
-          "modelProvider": "nous",
-          "modelCategory": "unknown",
-          "totalTokens": 482603,
-          "directTokens": 42539,
-          "messageCount": 28
-        },
-        {
           "clientCategory": "coding_agent",
           "modelName": "claude-opus-4-7",
           "modelProvider": "anthropic",
@@ -1203,6 +1194,15 @@
           "totalTokens": 41397089,
           "directTokens": 372833,
           "messageCount": 338
+        },
+        {
+          "clientCategory": "other_agent_tool",
+          "modelName": "deepseek/deepseek-v4-flash",
+          "modelProvider": "nous",
+          "modelCategory": "unknown",
+          "totalTokens": 482603,
+          "directTokens": 42539,
+          "messageCount": 28
         }
       ]
     },
@@ -1422,21 +1422,21 @@
       "breakdown": [
         {
           "clientCategory": "coding_agent",
-          "modelName": "claude-haiku-4-5",
-          "modelProvider": "anthropic",
-          "modelCategory": "frontier_coding",
-          "totalTokens": 550956,
-          "directTokens": 24849,
-          "messageCount": 21
-        },
-        {
-          "clientCategory": "coding_agent",
           "modelName": "claude-opus-4-8",
           "modelProvider": "anthropic",
           "modelCategory": "frontier_coding",
           "totalTokens": 102263485,
           "directTokens": 1489109,
           "messageCount": 637
+        },
+        {
+          "clientCategory": "coding_agent",
+          "modelName": "claude-haiku-4-5",
+          "modelProvider": "anthropic",
+          "modelCategory": "frontier_coding",
+          "totalTokens": 550956,
+          "directTokens": 24849,
+          "messageCount": 21
         }
       ]
     },
@@ -1489,15 +1489,6 @@
       "intensity": 1,
       "breakdown": [
         {
-          "clientCategory": "coding_agent",
-          "modelName": "claude-opus-4-8",
-          "modelProvider": "anthropic",
-          "modelCategory": "frontier_coding",
-          "totalTokens": 6011663,
-          "directTokens": 343811,
-          "messageCount": 82
-        },
-        {
           "clientCategory": "other_agent_tool",
           "modelName": "mimo-v2.5-pro",
           "modelProvider": "custom",
@@ -1505,6 +1496,15 @@
           "totalTokens": 13002787,
           "directTokens": 283555,
           "messageCount": 367
+        },
+        {
+          "clientCategory": "coding_agent",
+          "modelName": "claude-opus-4-8",
+          "modelProvider": "anthropic",
+          "modelCategory": "frontier_coding",
+          "totalTokens": 6011663,
+          "directTokens": 343811,
+          "messageCount": 82
         }
       ]
     },
@@ -1566,6 +1566,15 @@
       "intensity": 3,
       "breakdown": [
         {
+          "clientCategory": "other_agent_tool",
+          "modelName": "mimo-v2.5-pro",
+          "modelProvider": "custom",
+          "modelCategory": "unknown",
+          "totalTokens": 649370,
+          "directTokens": 90586,
+          "messageCount": 38
+        },
+        {
           "clientCategory": "coding_agent",
           "modelName": "claude-opus-4-8",
           "modelProvider": "anthropic",
@@ -1582,15 +1591,6 @@
           "totalTokens": 2625307,
           "directTokens": 78773,
           "messageCount": 67
-        },
-        {
-          "clientCategory": "other_agent_tool",
-          "modelName": "mimo-v2.5-pro",
-          "modelProvider": "custom",
-          "modelCategory": "unknown",
-          "totalTokens": 649370,
-          "directTokens": 90586,
-          "messageCount": 38
         }
       ]
     },
@@ -1609,15 +1609,6 @@
       "intensity": 2,
       "breakdown": [
         {
-          "clientCategory": "coding_agent",
-          "modelName": "claude-opus-4-8",
-          "modelProvider": "anthropic",
-          "modelCategory": "frontier_coding",
-          "totalTokens": 35620623,
-          "directTokens": 585536,
-          "messageCount": 211
-        },
-        {
           "clientCategory": "other_agent_tool",
           "modelName": "mimo-v2.5-pro",
           "modelProvider": "custom",
@@ -1625,6 +1616,15 @@
           "totalTokens": 167079,
           "directTokens": 31527,
           "messageCount": 14
+        },
+        {
+          "clientCategory": "coding_agent",
+          "modelName": "claude-opus-4-8",
+          "modelProvider": "anthropic",
+          "modelCategory": "frontier_coding",
+          "totalTokens": 35620623,
+          "directTokens": 585536,
+          "messageCount": 211
         }
       ]
     },
@@ -1711,15 +1711,6 @@
       "intensity": 1,
       "breakdown": [
         {
-          "clientCategory": "coding_agent",
-          "modelName": "claude-opus-4-8",
-          "modelProvider": "anthropic",
-          "modelCategory": "frontier_coding",
-          "totalTokens": 2121912,
-          "directTokens": 66720,
-          "messageCount": 23
-        },
-        {
           "clientCategory": "other_agent_tool",
           "modelName": "mimo-v2.5-pro",
           "modelProvider": "custom",
@@ -1727,6 +1718,15 @@
           "totalTokens": 163770,
           "directTokens": 29626,
           "messageCount": 14
+        },
+        {
+          "clientCategory": "coding_agent",
+          "modelName": "claude-opus-4-8",
+          "modelProvider": "anthropic",
+          "modelCategory": "frontier_coding",
+          "totalTokens": 2121912,
+          "directTokens": 66720,
+          "messageCount": 23
         }
       ]
     },
@@ -1745,15 +1745,6 @@
       "intensity": 1,
       "breakdown": [
         {
-          "clientCategory": "coding_agent",
-          "modelName": "claude-opus-4-8",
-          "modelProvider": "anthropic",
-          "modelCategory": "frontier_coding",
-          "totalTokens": 14723587,
-          "directTokens": 371740,
-          "messageCount": 116
-        },
-        {
           "clientCategory": "other_agent_tool",
           "modelName": "mimo-v2.5-pro",
           "modelProvider": "custom",
@@ -1761,6 +1752,15 @@
           "totalTokens": 2376565,
           "directTokens": 99189,
           "messageCount": 92
+        },
+        {
+          "clientCategory": "coding_agent",
+          "modelName": "claude-opus-4-8",
+          "modelProvider": "anthropic",
+          "modelCategory": "frontier_coding",
+          "totalTokens": 14723587,
+          "directTokens": 371740,
+          "messageCount": 116
         }
       ]
     },
@@ -1881,15 +1881,6 @@
       "intensity": 1,
       "breakdown": [
         {
-          "clientCategory": "other_agent_tool",
-          "modelName": "mimo-v2.5-pro",
-          "modelProvider": "custom",
-          "modelCategory": "unknown",
-          "totalTokens": 135346,
-          "directTokens": 28594,
-          "messageCount": 10
-        },
-        {
           "clientCategory": "coding_agent",
           "modelName": "claude-opus-4-8",
           "modelProvider": "anthropic",
@@ -1897,6 +1888,15 @@
           "totalTokens": 38,
           "directTokens": 38,
           "messageCount": 0
+        },
+        {
+          "clientCategory": "other_agent_tool",
+          "modelName": "mimo-v2.5-pro",
+          "modelProvider": "custom",
+          "modelCategory": "unknown",
+          "totalTokens": 135346,
+          "directTokens": 28594,
+          "messageCount": 10
         }
       ]
     },
@@ -1958,15 +1958,6 @@
           "messageCount": 26
         },
         {
-          "clientCategory": "other_agent_tool",
-          "modelName": "mimo-v2.5-pro",
-          "modelProvider": "custom",
-          "modelCategory": "unknown",
-          "totalTokens": 170755,
-          "directTokens": 61955,
-          "messageCount": 11
-        },
-        {
           "clientCategory": "coding_agent",
           "modelName": "gpt-5.5",
           "modelProvider": "OpenAI",
@@ -1974,6 +1965,15 @@
           "totalTokens": 5189712,
           "directTokens": 574032,
           "messageCount": 69
+        },
+        {
+          "clientCategory": "other_agent_tool",
+          "modelName": "mimo-v2.5-pro",
+          "modelProvider": "custom",
+          "modelCategory": "unknown",
+          "totalTokens": 170755,
+          "directTokens": 61955,
+          "messageCount": 11
         }
       ]
     },
@@ -1993,21 +1993,21 @@
       "breakdown": [
         {
           "clientCategory": "coding_agent",
-          "modelName": "glm-x-preview",
-          "modelProvider": "unknown",
-          "modelCategory": "unknown",
-          "totalTokens": 55858438,
-          "directTokens": 641286,
-          "messageCount": 173
-        },
-        {
-          "clientCategory": "coding_agent",
           "modelName": "gpt-5.5",
           "modelProvider": "OpenAI",
           "modelCategory": "frontier_reasoning",
           "totalTokens": 1924317,
           "directTokens": 423645,
           "messageCount": 25
+        },
+        {
+          "clientCategory": "coding_agent",
+          "modelName": "claude-opus-4-8",
+          "modelProvider": "anthropic",
+          "modelCategory": "frontier_coding",
+          "totalTokens": 41180,
+          "directTokens": 261,
+          "messageCount": 1
         },
         {
           "clientCategory": "other_agent_tool",
@@ -2020,12 +2020,12 @@
         },
         {
           "clientCategory": "coding_agent",
-          "modelName": "claude-opus-4-8",
-          "modelProvider": "anthropic",
-          "modelCategory": "frontier_coding",
-          "totalTokens": 41180,
-          "directTokens": 261,
-          "messageCount": 1
+          "modelName": "glm-x-preview",
+          "modelProvider": "unknown",
+          "modelCategory": "unknown",
+          "totalTokens": 55858438,
+          "directTokens": 641286,
+          "messageCount": 173
         }
       ]
     },
@@ -2180,15 +2180,6 @@
       "intensity": 1,
       "breakdown": [
         {
-          "clientCategory": "other_agent_tool",
-          "modelName": "mimo-v2.5-pro",
-          "modelProvider": "custom",
-          "modelCategory": "unknown",
-          "totalTokens": 138150,
-          "directTokens": 29734,
-          "messageCount": 11
-        },
-        {
           "clientCategory": "coding_agent",
           "modelName": "gpt-5.5",
           "modelProvider": "OpenAI",
@@ -2196,6 +2187,15 @@
           "totalTokens": 4531456,
           "directTokens": 548608,
           "messageCount": 56
+        },
+        {
+          "clientCategory": "other_agent_tool",
+          "modelName": "mimo-v2.5-pro",
+          "modelProvider": "custom",
+          "modelCategory": "unknown",
+          "totalTokens": 138150,
+          "directTokens": 29734,
+          "messageCount": 11
         }
       ]
     },
@@ -2214,15 +2214,6 @@
       "intensity": 2,
       "breakdown": [
         {
-          "clientCategory": "coding_agent",
-          "modelName": "gpt-5.5",
-          "modelProvider": "OpenAI",
-          "modelCategory": "frontier_reasoning",
-          "totalTokens": 41265674,
-          "directTokens": 2770442,
-          "messageCount": 441
-        },
-        {
           "clientCategory": "other_agent_tool",
           "modelName": "mimo-v2.5-pro",
           "modelProvider": "custom",
@@ -2230,22 +2221,31 @@
           "totalTokens": 170568,
           "directTokens": 32584,
           "messageCount": 13
+        },
+        {
+          "clientCategory": "coding_agent",
+          "modelName": "gpt-5.5",
+          "modelProvider": "OpenAI",
+          "modelCategory": "frontier_reasoning",
+          "totalTokens": 41265674,
+          "directTokens": 2770442,
+          "messageCount": 441
         }
       ]
     },
     {
       "date": "2026-06-22",
-      "totalTokens": 19100637,
-      "directTokens": 1722077,
-      "cacheTokens": 17378560,
-      "inputTokens": 1487406,
-      "outputTokens": 179076,
-      "cacheReadTokens": 17378560,
+      "totalTokens": 29038974,
+      "directTokens": 2995838,
+      "cacheTokens": 26043136,
+      "inputTokens": 2619684,
+      "outputTokens": 283899,
+      "cacheReadTokens": 26043136,
       "cacheWriteTokens": 0,
-      "reasoningTokens": 55595,
-      "messageCount": 324,
-      "activeTimeMs": 8404171,
-      "intensity": 1,
+      "reasoningTokens": 92255,
+      "messageCount": 527,
+      "activeTimeMs": 14339745,
+      "intensity": 2,
       "breakdown": [
         {
           "clientCategory": "other_agent_tool",
@@ -2261,9 +2261,9 @@
           "modelName": "gpt-5.5",
           "modelProvider": "OpenAI",
           "modelCategory": "frontier_reasoning",
-          "totalTokens": 18130886,
-          "directTokens": 1656262,
-          "messageCount": 272
+          "totalTokens": 28069223,
+          "directTokens": 2930023,
+          "messageCount": 475
         }
       ]
     }

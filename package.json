@@ -10,6 +10,7 @@
     "test": "tsx --test tests/*.test.ts",
     "validate:data": "tsx scripts/validate-token-usage.ts",
     "collect:tokens": "tsx scripts/collect-token-usage.ts",
+    "refresh:tokens": "bash scripts/refresh-token-dashboard.sh",
     "scan:public": "tsx scripts/scan-public-artifacts.ts",
     "verify": "npm run validate:data && npm test && npm run typecheck && npm run build && npm run scan:public"
   },

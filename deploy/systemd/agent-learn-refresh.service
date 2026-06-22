@@ -1,0 +1,14 @@
+[Unit]
+Description=Refresh Agent Learn token dashboard
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/home/ubuntu/tool/agent_learn/package.json
+
+[Service]
+Type=oneshot
+Environment=NEXT_TELEMETRY_DISABLED=1
+Environment=AGENT_LEARN_SOURCE_DIR=/home/ubuntu/tool/agent_learn
+Environment=AGENT_LEARN_DEPLOY_DIR=/opt/agent-learn
+Environment=AGENT_LEARN_APP_SERVICE=agent-learn.service
+Environment=AGENT_LEARN_RUN_USER=ubuntu
+ExecStart=/home/ubuntu/tool/agent_learn/scripts/refresh-token-dashboard.sh

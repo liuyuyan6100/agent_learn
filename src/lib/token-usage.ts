@@ -113,6 +113,7 @@ const FORBIDDEN_KEYS = new Set([
 const EMAIL_RE = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i;
 const API_KEY_RE = /\b(sk-[A-Za-z0-9_-]{12,}|OPENAI_API_KEY|ANTHROPIC_API_KEY|api[_-]?key\s*[=:])/i;
 const LOCAL_PATH_RE = /(\/home\/|\/Users\/|[A-Z]:\\|\.config\/|session[s]?\b.*\/|workspace[s]?\b.*\/)/i;
+const DISPLAY_TIME_ZONE = "Asia/Shanghai";
 
 type UnknownRecord = Record<string, unknown>;
 
@@ -214,7 +215,7 @@ export function formatDateLabel(date: string): string {
   return new Intl.DateTimeFormat("zh-CN", {
     month: "short",
     day: "numeric",
-    timeZone: "UTC"
+    timeZone: DISPLAY_TIME_ZONE
   }).format(utcDate(date));
 }
 
@@ -222,7 +223,7 @@ export function formatGeneratedAt(dateTime: string): string {
   return new Intl.DateTimeFormat("zh-CN", {
     dateStyle: "medium",
     timeStyle: "short",
-    timeZone: "UTC"
+    timeZone: DISPLAY_TIME_ZONE
   }).format(new Date(dateTime));
 }
 

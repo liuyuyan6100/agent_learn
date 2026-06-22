@@ -1,3 +1,5 @@
+import { TokenRefreshButton } from "@/src/components/token-refresh-button";
+import { TokenTrendChart } from "@/src/components/token-trend-chart";
 import {
   formatDateLabel,
   formatGeneratedAt,
@@ -6,9 +8,10 @@ import {
   isSyntheticModelName,
   sortDaily,
   type TokenUsageDataset,
-  type TokenUsageDay,
   type TokenUsageModel
 } from "@/src/lib/token-usage";
+
+const MODEL_PREVIEW_LIMIT = 5;
 
 interface TokenUsageDashboardProps {
   dataset: TokenUsageDataset;
@@ -30,9 +33,12 @@ export function TokenUsageDashboard({ dataset }: TokenUsageDashboardProps) {
           <p className="eyebrow">Token 使用看板</p>
           <h2 id="token-dashboard-title">Agent token 消耗总览</h2>
         </div>
-        <div className={stale ? "freshness stale" : "freshness"}>
-          <span>{stale ? "数据可能已过期" : "数据已更新"}</span>
-          <strong>{formatGeneratedAt(dataset.generatedAt)} UTC</strong>
+        <div className="dashboard-actions">
+          <TokenRefreshButton />
+          <div className={stale ? "freshness stale" : "freshness"}>
+            <span>{stale ? "数据可能已过期" : "数据已更新"}</span>
+            <strong>{formatGeneratedAt(dataset.generatedAt)} 北京时间</strong>
+          </div>
         </div>
       </div>
 
@@ -83,90 +89,37 @@ function TokenMetricCards({ dataset }: TokenUsageDashboardProps) {
   );
 }
 
-function TokenTrendChart({ daily }: { daily: TokenUsageDay[] }) {
-  const maxTotal = Math.max(...daily.map((day) => day.totalTokens), 1);
-  const width = 920;
-  const height = 260;
-  const plotTop = 20;
-  const plotBottom = 220;
-  const slotWidth = width / daily.length;
-  const barWidth = Math.min(48, slotWidth * 0.58);
-  const directLine = daily
-    .map((day, index) => {
-      const x = slotWidth * index + slotWidth / 2;
-      const y = plotBottom - (day.directTokens / maxTotal) * (plotBottom - plotTop);
-      return `${x},${y}`;
-    })
-    .join(" ");
-
-  return (
-    <article className="chart-card">
-      <div className="card-heading">
-        <div>
-          <p className="eyebrow">每日趋势</p>
-          <h3>最近 30 个活跃日</h3>
-        </div>
-        <span>{daily.length} 个日样本</span>
-      </div>
-      <svg className="trend-chart" viewBox={`0 0 ${width} ${height}`} role="img" aria-label="每日 token 趋势图">
-        <defs>
-          <linearGradient id="tokenBar" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor="#5fffb1" stopOpacity="0.95" />
-            <stop offset="100%" stopColor="#1f8f68" stopOpacity="0.55" />
-          </linearGradient>
-          <linearGradient id="directLine" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stopColor="#f6c85f" />
-            <stop offset="100%" stopColor="#ff7f50" />
-          </linearGradient>
-        </defs>
-        {[0.25, 0.5, 0.75, 1].map((tick) => {
-          const y = plotBottom - tick * (plotBottom - plotTop);
-          return <line className="chart-grid-line" x1="0" x2={width} y1={y} y2={y} key={tick} />;
-        })}
-        {daily.map((day, index) => {
-          const x = slotWidth * index + slotWidth / 2 - barWidth / 2;
-          const totalHeight = (day.totalTokens / maxTotal) * (plotBottom - plotTop);
-          const directHeight = (day.directTokens / maxTotal) * (plotBottom - plotTop);
-          return (
-            <g key={day.date}>
-              <rect
-                className="token-bar"
-                x={x}
-                y={plotBottom - totalHeight}
-                width={barWidth}
-                height={totalHeight}
-                rx="10"
-              />
-              <rect
-                className="direct-bar"
-                x={x + barWidth * 0.24}
-                y={plotBottom - directHeight}
-                width={barWidth * 0.52}
-                height={directHeight}
-                rx="8"
-              />
-              <text className="chart-label" x={x + barWidth / 2} y={height - 14} textAnchor="middle">
-                {formatDateLabel(day.date)}
-              </text>
-            </g>
-          );
-        })}
-        <polyline className="direct-polyline" points={directLine} />
-      </svg>
-      <div className="legend-row">
-        <span>
-          <i className="legend-total" /> 总 token
-        </span>
-        <span>
-          <i className="legend-direct" /> 直接 token
-        </span>
-      </div>
-    </article>
-  );
-}
-
 function TokenModelBreakdown({ models, totalTokens }: { models: TokenUsageModel[]; totalTokens: number }) {
-  const visibleModels = models.filter((model) => model.totalTokens > 0 && !isSyntheticModelName(model.modelName));
+  const visibleModels = models
+    .filter((model) => model.totalTokens > 0 && !isSyntheticModelName(model.modelName))
+    .sort((a, b) => b.totalTokens - a.totalTokens || a.modelName.localeCompare(b.modelName));
+  const previewModels = visibleModels.slice(0, MODEL_PREVIEW_LIMIT);
+  const remainingModels = visibleModels.slice(MODEL_PREVIEW_LIMIT);
+
+  function renderModelRow(model: TokenUsageModel, index: number) {
+    const percent = totalTokens === 0 ? 0 : Math.round((model.totalTokens / totalTokens) * 100);
+    const modelKey = `${model.modelProvider}:${model.modelCategory ?? "unknown"}:${model.modelName}:${index}`;
+
+    return (
+      <div className="model-row" key={modelKey}>
+        <div className="model-row-heading">
+          <span className="model-row-main">
+            <strong>{model.modelName}</strong>
+            <span className="model-bar" aria-hidden="true">
+              <span style={{ width: `${percent}%` }} />
+            </span>
+          </span>
+          <span className="model-percent">{percent}%</span>
+        </div>
+        <div className="model-meta">
+          <span>{model.modelProvider}</span>
+          <span>{model.modelCategory ?? "unknown"}</span>
+          <span>{model.messageCount} 条消息</span>
+        </div>
+        <p>{formatTokenCount(model.totalTokens)} 总量 / {formatTokenCount(model.directTokens)} 直接 token</p>
+      </div>
+    );
+  }
 
   return (
     <article className="model-card">
@@ -178,26 +131,18 @@ function TokenModelBreakdown({ models, totalTokens }: { models: TokenUsageModel[
         <span>{visibleModels.length} 个模型</span>
       </div>
       <div className="model-list">
-        {visibleModels.map((model) => {
-          const percent = totalTokens === 0 ? 0 : Math.round((model.totalTokens / totalTokens) * 100);
-          return (
-            <div className="model-row" key={model.modelName}>
-              <div className="model-row-top">
-                <strong>{model.modelName}</strong>
-                <span>{percent}%</span>
-              </div>
-              <div className="model-meta">
-                <span>{model.modelProvider}</span>
-                <span>{model.modelCategory ?? "unknown"}</span>
-                <span>{model.messageCount} 条消息</span>
-              </div>
-              <div className="model-bar" aria-hidden="true">
-                <span style={{ width: `${percent}%` }} />
-              </div>
-              <p>{formatTokenCount(model.totalTokens)} 总量 / {formatTokenCount(model.directTokens)} 直接 token</p>
+        {previewModels.map(renderModelRow)}
+        {remainingModels.length > 0 ? (
+          <details className="model-more">
+            <summary className="model-more-summary">
+              <span>展开全部模型</span>
+              <span>{remainingModels.length} 个更多</span>
+            </summary>
+            <div className="model-list model-list-expanded">
+              {remainingModels.map((model, index) => renderModelRow(model, index + MODEL_PREVIEW_LIMIT))}
             </div>
-          );
-        })}
+          </details>
+        ) : null}
       </div>
     </article>
   );

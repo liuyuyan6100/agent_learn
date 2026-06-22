@@ -1,0 +1,9 @@
+[Unit]
+Description=Watch for Agent Learn manual refresh requests
+
+[Path]
+PathChanged=/var/lib/agent-learn/refresh.request
+Unit=agent-learn-refresh.service
+
+[Install]
+WantedBy=multi-user.target
