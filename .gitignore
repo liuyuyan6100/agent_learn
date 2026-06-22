@@ -1,1 +1,9 @@
+node_modules/
+.next/
+.artifacts/
+out/
+dist/
+*.tsbuildinfo
+.env*.local
+.DS_Store
 docs/agent-showcase-plan.md
