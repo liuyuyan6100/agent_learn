@@ -9,8 +9,9 @@ Public URL: https://agent.aiclawonline.website/
 ## Current MVP
 
 - Next.js + TypeScript app using the App Router.
-- Token usage dashboard backed by `data/token-usage.json`.
-- Agent Signals module backed by `data/agent-signals.json`, with a homepage summary and `/signals` list page.
+- Module-card homepage that links to dedicated feature pages.
+- Token usage dashboard at `/usage`, backed by `data/token-usage.json`.
+- Agent Signals module at `/signals`, backed by `data/agent-signals.json`.
 - Public `modelName` display with client names reduced to `clientCategory`.
 - Schema, arithmetic and privacy validation for public token and Agent Signals data.
 - `tokscale` collector script that refuses to overwrite valid data on invalid CLI output.

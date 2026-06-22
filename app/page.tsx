@@ -1,62 +1,79 @@
+import Link from "next/link";
 import agentSignalsData from "../data/agent-signals.json";
 import tokenUsageData from "../data/token-usage.json";
-import { AgentSignalsSummary } from "@/src/components/agent-signals-summary";
-import { TokenUsageDashboard } from "@/src/components/token-usage-dashboard";
-import { assertAgentSignalsDataset } from "@/src/lib/agent-signals";
-import { assertTokenUsageDataset, formatDateLabel, formatTokenCount } from "@/src/lib/token-usage";
+import { assertAgentSignalsDataset, formatAgentSignalsGeneratedAt, getRecentSignals } from "@/src/lib/agent-signals";
+import { assertTokenUsageDataset, formatGeneratedAt, formatTokenCount } from "@/src/lib/token-usage";
 
 export default function Home() {
   const agentSignals = assertAgentSignalsDataset(agentSignalsData);
   const tokenUsage = assertTokenUsageDataset(tokenUsageData);
+  const recentSignal = getRecentSignals(agentSignals, 1)[0];
 
   return (
     <main className="shell">
-      <section className="hero-panel">
+      <section className="hero-panel hero-panel-compact">
         <div className="hero-copy">
           <p className="eyebrow">Agent 工程驾驶舱</p>
           <h1>
-            <span>用真实数据</span>
-            <span>展示持续</span>
+            <span>模块化展示</span>
             <span>Agent 实践。</span>
           </h1>
           <p className="hero-lede">
-            这个仪表盘把本地 Agent 使用遥测转成可公开访问、隐私安全的证据：
-            token 使用趋势、模型构成、工作流记录和下一步自动化闭环。
+            首页只保留模块入口和关键概览；完整数据、列表和交互都进入独立页面，后续新增模块只需要增加一张入口卡。
           </p>
         </div>
-        <div className="hero-total-card" aria-label="从第一天到现在的总 token 消耗">
-          <p className="eyebrow">从第一天到现在</p>
-          <strong>{formatTokenCount(tokenUsage.totals.totalTokens)}</strong>
+        <div className="hero-total-card overview-card" aria-label="当前公开模块概览">
+          <p className="eyebrow">当前模块</p>
+          <strong>2</strong>
           <div className="hero-total-meta">
-            <span>{formatDateLabel(tokenUsage.period.start)} 至今</span>
-            <span>{formatTokenCount(tokenUsage.totals.directTokens)} 直接 token</span>
-            <span>{tokenUsage.totals.messageCount} 条 Agent 消息</span>
-            <span>{tokenUsage.totals.activeDays} 个活跃日</span>
+            <span>Token Usage 已上线</span>
+            <span>Agent Signals 已上线</span>
+            <span>{formatTokenCount(tokenUsage.totals.totalTokens)} 累计 token</span>
+            <span>{agentSignals.signals.length} 条公开信号</span>
           </div>
         </div>
       </section>
 
-      <section className="proof-grid" aria-label="Agent 工程证据">
-        <article>
-          <span>01</span>
-          <h2>工具遥测</h2>
-          <p>token 使用记录来自本地 CLI，经过归一化后生成稳定的公开 JSON 数据契约。</p>
-        </article>
-        <article>
-          <span>02</span>
-          <h2>隐私边界</h2>
-          <p>模型名称按设计公开；账号、本机路径、prompt、会话路径和内部项目名会被拒绝进入公开数据。</p>
-        </article>
-        <article>
-          <span>03</span>
-          <h2>学习闭环</h2>
-          <p>后续可以把使用峰值关联到文章、实验记录和 Agent 方向日报，形成持续复盘链路。</p>
-        </article>
+      <section className="module-panel" aria-labelledby="module-panel-title">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Modules</p>
+            <h2 id="module-panel-title">功能模块</h2>
+          </div>
+        </div>
+
+        <div className="module-grid">
+          <Link className="module-card" href="/usage">
+            <div className="module-card-topline">
+              <span>01</span>
+              <span>Token Usage</span>
+            </div>
+            <h3>Token 使用看板</h3>
+            <p>查看公开 token 总量、最近窗口、每日趋势、模型构成和数据刷新状态。</p>
+            <div className="module-metrics" aria-label="Token 使用摘要">
+              <span>{formatTokenCount(tokenUsage.totals.totalTokens)} 总 token</span>
+              <span>{formatTokenCount(tokenUsage.windows.last30Days.totalTokens)} 近 30 天</span>
+              <span>{formatGeneratedAt(tokenUsage.generatedAt)} 北京时间</span>
+            </div>
+            <strong>进入看板</strong>
+          </Link>
+
+          <Link className="module-card" href="/signals">
+            <div className="module-card-topline">
+              <span>02</span>
+              <span>Agent Signals</span>
+            </div>
+            <h3>Agent 开发日报</h3>
+            <p>浏览公开来源中的工程趋势、招聘要求、能力标签、当前差距和后续行动。</p>
+            <div className="module-metrics" aria-label="Agent Signals 摘要">
+              <span>{agentSignals.signals.length} 条公开信号</span>
+              <span>{recentSignal ? `最近：${recentSignal.title}` : "等待第一条信号"}</span>
+              <span>{formatAgentSignalsGeneratedAt(agentSignals.generatedAt)} 北京时间</span>
+            </div>
+            <strong>进入列表</strong>
+          </Link>
+        </div>
       </section>
-
-      <AgentSignalsSummary dataset={agentSignals} />
-
-      <TokenUsageDashboard dataset={tokenUsage} />
     </main>
   );
 }

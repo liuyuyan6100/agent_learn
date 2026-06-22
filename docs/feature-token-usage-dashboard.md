@@ -9,7 +9,7 @@
 - 公开策略：模型名称公开，客户端名称脱敏，成本默认隐藏
 - 关联总规划：`docs/agent-showcase-plan.md`
 - 模块流程要求：`docs/module-spec-process.md`
-- 实现入口：`app/page.tsx`
+- 实现入口：`app/usage/page.tsx`
 - 数据文件：`data/token-usage.json`
 - 验证命令：`npm run verify`
 - 公开地址：`https://agent.aiclawonline.website/`
@@ -241,8 +241,8 @@ data/token-usage.json
 
 页面入口：
 
-- `/`：展示 MVP token 看板摘要。
-- `/usage`：后续详情页，可复用同一数据契约。
+- `/`：展示 Token Usage 模块入口卡。
+- `/usage`：展示完整 token 看板。
 
 推荐组件边界：
 

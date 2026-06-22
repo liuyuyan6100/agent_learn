@@ -4,14 +4,14 @@
 
 - 模块名称：Agent Signals / Agent 开发日报
 - 所属里程碑：M3
-- 当前状态：MVP 已实现，首页摘要和 `/signals` 页面已接入
+- 当前状态：MVP 已实现，首页模块入口卡和 `/signals` 页面已接入
 - 主要数据源：人工维护记录；后续接入自动搜索后的人工确认结果
 - 公开策略：只展示公开来源、脱敏摘要、能力要求和后续行动；不展示账号、私密面试记录、内部项目名或未审阅原文
 - 关联总规划：`docs/agent-showcase-plan.md`
 - 模块流程要求：`docs/module-spec-process.md`
 - 计划数据文件：`data/agent-signals.json`
 - 计划页面入口：`/signals`
-- 首页入口：`app/page.tsx` 展示最近 3-5 条摘要
+- 首页入口：`app/page.tsx` 展示模块入口卡
 - 验证命令：`npm run verify`
 
 ## 1. 功能目标
@@ -37,7 +37,7 @@
 
 - 新增公开数据文件 `data/agent-signals.json`。
 - 支持 5-20 条人工维护或人工确认后的 Agent 信号记录。
-- 首页展示最近 3-5 条记录摘要。
+- 首页展示 Agent Signals 模块入口卡。
 - `/signals` 页面展示完整列表，并支持按来源类型和能力标签浏览。
 - 每条记录展示日期、来源类型、标题、公开链接、摘要、能力要求、当前差距、后续行动。
 - 提供空状态、过期提示和数据来源说明。
@@ -107,7 +107,7 @@ data/agent-signals.json
 
 消费方：
 
-- 首页 Agent 信号摘要模块。
+- 首页 Agent Signals 模块入口卡。
 - `/signals` 列表页。
 - 后续周总结或文章模块。
 
@@ -203,7 +203,7 @@ data/agent-signals.json
 
 ## 5. UI 状态
 
-- 正常：首页展示最近 3-5 条，`/signals` 展示完整列表、来源类型筛选和能力标签筛选。
+- 正常：首页展示模块入口卡，`/signals` 展示完整列表、来源类型筛选和能力标签筛选。
 - 空状态：说明模块用于沉淀 Agent 工程信号，并提示等待第一批记录。
 - 错误：数据文件缺失、格式错误或 schema 校验失败时展示数据暂不可用。
 - 过期：`generatedAt` 超过 7 天时提示数据可能需要刷新。
@@ -220,7 +220,7 @@ data/agent-signals.json
 | SIG-005 | 隐私 | JSON 中出现邮箱、API key、cookie、本机路径、原始 prompt 或 raw HTML | 测试失败 |
 | SIG-006 | 隐私 | `source.containsRawScrapes` 或 `source.containsPrivateInterviewDetails` 为 `true` | 测试失败 |
 | SIG-007 | 排序 | 多条记录日期无序 | 页面按日期倒序展示 |
-| SIG-008 | UI | 首页记录超过 5 条 | 首页只展示最近 3-5 条，布局不溢出 |
+| SIG-008 | UI | 记录超过 5 条 | 首页模块卡只展示摘要指标，完整列表在 `/signals` |
 | SIG-009 | UI | `signals[]` 为空 | 展示空状态，不崩溃 |
 | SIG-010 | UI | `generatedAt` 超过 7 天 | 展示过期提示 |
 | SIG-011 | 筛选 | 按来源类型筛选 | 只展示匹配记录，并保留空结果状态 |
@@ -230,7 +230,7 @@ data/agent-signals.json
 ## 7. 验收标准
 
 - `data/agent-signals.json` 符合本文件 JSON 契约。
-- 首页能展示最近 Agent 信号摘要，不影响现有 token 看板。
+- 首页能展示 Agent Signals 模块入口卡，不影响现有 token 看板详情页。
 - `/signals` 页面能浏览完整信号列表并进行基础筛选。
 - 页面和公开 JSON 不包含账号、邮箱、API key、cookie、原始 prompt、本机路径、workspace path、内部项目名、私密面试详情或未审阅抓取正文。
 - 空状态、错误状态和过期状态都有明确展示。
@@ -261,7 +261,7 @@ npm run verify
 2. 已完成：定义 Agent Signals TypeScript 类型和 schema 校验函数。
 3. 已完成：新增 `scripts/validate-agent-signals.ts`。
 4. 已完成：补充 SIG-001 至 SIG-013 测试。
-5. 已完成：实现首页最近信号摘要模块。
+5. 已完成：实现首页 Agent Signals 模块入口卡。
 6. 已完成：实现 `/signals` 列表页和筛选控件。
 7. 已完成：把 Agent Signals 校验纳入 `npm run verify`。
 8. 已完成：更新 README 和总规划文档中的接续状态。
@@ -270,7 +270,7 @@ npm run verify
 ## 9. 待确认问题
 
 - 第一批公开信号记录已先放入 6 条人工确认样例，后续需要替换或扩展为持续维护的真实记录。
-- 首页第一版展示 3 条，避免首页过长。
+- 首页已改为模块入口卡，完整列表只在 `/signals` 展示。
 - `/signals` 首版使用 URL query 做服务端筛选，客户端筛选作为后续增强。
 - `currentGap` 已公开展示，但只写成抽象学习方向。
 - 自动搜索脚本是否放到本模块第二阶段，建议等公开列表和隐私测试稳定后再接入。
