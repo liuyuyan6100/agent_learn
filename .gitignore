@@ -7,3 +7,4 @@ dist/
 .env*.local
 .DS_Store
 docs/agent-showcase-plan.md
+data/token-usage.json
