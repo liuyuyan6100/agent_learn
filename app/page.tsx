@@ -1,12 +1,18 @@
 import Link from "next/link";
 import agentSignalsData from "../data/agent-signals.json";
-import tokenUsageData from "../data/token-usage.json";
 import { assertAgentSignalsDataset, formatAgentSignalsGeneratedAt, getRecentSignals } from "@/src/lib/agent-signals";
-import { assertTokenUsageDataset, formatGeneratedAt, formatTokenCount } from "@/src/lib/token-usage";
+import { getPlanLoginPath, getPlanSessionUser } from "@/src/lib/plan-auth";
+import { readTokenUsageDataset } from "@/src/lib/token-usage-data";
+import { formatGeneratedAt, formatTokenCount } from "@/src/lib/token-usage";
 
-export default function Home() {
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function Home() {
   const agentSignals = assertAgentSignalsDataset(agentSignalsData);
-  const tokenUsage = assertTokenUsageDataset(tokenUsageData);
+  const tokenUsage = await readTokenUsageDataset();
+  const planUser = await getPlanSessionUser();
   const recentSignal = getRecentSignals(agentSignals, 1)[0];
 
   return (
@@ -30,6 +36,30 @@ export default function Home() {
             <span>Agent Signals 已上线</span>
             <span>{formatTokenCount(tokenUsage.totals.totalTokens)} 累计 token</span>
             <span>{agentSignals.signals.length} 条公开信号</span>
+          </div>
+          <div className="admin-access" aria-label="管理员访问入口">
+            <div className="admin-access-heading">
+              <span>访问身份</span>
+              <strong>{planUser ? planUser.email : "游客"}</strong>
+            </div>
+            <div className="admin-access-actions">
+              {planUser ? (
+                <>
+                  <Link className="admin-access-button" href="/plan">
+                    进入私有看板
+                  </Link>
+                  <form action="/api/auth/logout" method="post">
+                    <button className="admin-logout-button" type="submit">
+                      退出
+                    </button>
+                  </form>
+                </>
+              ) : (
+                <Link className="admin-access-button" href={getPlanLoginPath("/plan")}>
+                  管理员登录
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </section>
@@ -64,7 +94,7 @@ export default function Home() {
               <span>Agent Signals</span>
             </div>
             <h3>Agent 开发日报</h3>
-            <p>浏览公开来源中的工程趋势、招聘要求、能力标签、当前差距和后续行动。</p>
+            <p>把搜索到的文章、产品和外部信息提炼成中文侦察摘要、价值判断和后续工程动作。</p>
             <div className="module-metrics" aria-label="Agent Signals 摘要">
               <span>{agentSignals.signals.length} 条公开信号</span>
               <span>{recentSignal ? `最近：${recentSignal.title}` : "等待第一条信号"}</span>

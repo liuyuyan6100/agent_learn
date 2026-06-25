@@ -34,7 +34,7 @@ export function TokenUsageDashboard({ dataset }: TokenUsageDashboardProps) {
           <h2 id="token-dashboard-title">Agent token 消耗总览</h2>
         </div>
         <div className="dashboard-actions">
-          <TokenRefreshButton />
+          <TokenRefreshButton generatedAt={dataset.generatedAt} />
           <div className={stale ? "freshness stale" : "freshness"}>
             <span>{stale ? "数据可能已过期" : "数据已更新"}</span>
             <strong>{formatGeneratedAt(dataset.generatedAt)} 北京时间</strong>

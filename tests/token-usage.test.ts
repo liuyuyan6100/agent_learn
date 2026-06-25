@@ -12,6 +12,7 @@ import {
   isSyntheticModelName,
   type TokenUsageDataset
 } from "../src/lib/token-usage";
+import { readTokenUsageDataset } from "../src/lib/token-usage-data";
 import { collectTokenUsageToFileFromOutputs, normalizeTokscaleData } from "../src/lib/tokscale-collector";
 
 const dataset = readDataset();
@@ -184,7 +185,17 @@ test("TUD-015 rejects synthetic public model names", () => {
   assert.throws(() => assertTokenUsageDataset(invalid), /real public model name/);
 });
 
-test("TUD-016 normalizes real tokscale graph tokenBreakdown and nested client tokens", () => {
+test("TUD-016 reads token usage data from a runtime JSON file", async () => {
+  const tempDir = mkdtempSync(join(tmpdir(), "agent-learn-runtime-"));
+  const dataPath = join(tempDir, "token-usage.json");
+  writeFileSync(dataPath, JSON.stringify(dataset));
+
+  const runtimeDataset = await readTokenUsageDataset(dataPath);
+  assert.equal(runtimeDataset.generatedAt, dataset.generatedAt);
+  assert.equal(runtimeDataset.totals.totalTokens, dataset.totals.totalTokens);
+});
+
+test("TUD-017 normalizes real tokscale graph tokenBreakdown and nested client tokens", () => {
   const normalized = normalizeTokscaleData(
     {
       contributions: [
@@ -279,7 +290,7 @@ test("TUD-016 normalizes real tokscale graph tokenBreakdown and nested client to
   assert.doesNotThrow(() => assertTokenUsageDataset(normalized));
 });
 
-test("TUD-017 uses the first real usage date for all-time collection periods", () => {
+test("TUD-018 uses the first real usage date for all-time collection periods", () => {
   const normalized = normalizeTokscaleData(
     {
       contributions: [
@@ -358,7 +369,7 @@ test("TUD-017 uses the first real usage date for all-time collection periods", (
   assert.doesNotThrow(() => assertTokenUsageDataset(normalized));
 });
 
-test("TUD-018 keeps synthetic model tokens out of the public model breakdown", () => {
+test("TUD-019 keeps synthetic model tokens out of the public model breakdown", () => {
   const normalized = normalizeTokscaleData(
     {
       contributions: [

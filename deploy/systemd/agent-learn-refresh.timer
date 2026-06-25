@@ -1,5 +1,5 @@
 [Unit]
-Description=Run Agent Learn token dashboard refresh hourly
+Description=Run Agent Learn token usage data refresh hourly
 
 [Timer]
 OnCalendar=hourly

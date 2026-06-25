@@ -4,7 +4,18 @@ import { useState } from "react";
 
 type RefreshStatus = "idle" | "starting" | "started" | "blocked" | "error";
 
-export function TokenRefreshButton() {
+const REFRESH_POLL_INTERVAL_MS = 3000;
+const REFRESH_POLL_TIMEOUT_MS = 90000;
+
+interface TokenRefreshButtonProps {
+  generatedAt: string;
+}
+
+interface TokenRefreshSnapshot {
+  generatedAt?: string;
+}
+
+export function TokenRefreshButton({ generatedAt }: TokenRefreshButtonProps) {
   const [status, setStatus] = useState<RefreshStatus>("idle");
   const [message, setMessage] = useState("");
   const busy = status === "starting" || status === "started";
@@ -23,8 +34,13 @@ export function TokenRefreshButton() {
 
       if (response.status === 202) {
         setStatus("started");
-        setMessage("刷新已启动，构建完成后页面会更新。");
-        window.setTimeout(() => window.location.reload(), 90000);
+        setMessage("刷新已启动，完成后页面会自动更新。");
+        waitForDatasetRefresh(generatedAt)
+          .then(() => window.location.reload())
+          .catch(() => {
+            setStatus("blocked");
+            setMessage("刷新已启动，请稍后刷新页面。");
+          });
         return;
       }
 
@@ -61,6 +77,30 @@ export function TokenRefreshButton() {
       ) : null}
     </div>
   );
+}
+
+async function waitForDatasetRefresh(previousGeneratedAt: string): Promise<void> {
+  const deadline = Date.now() + REFRESH_POLL_TIMEOUT_MS;
+
+  while (Date.now() < deadline) {
+    await delay(REFRESH_POLL_INTERVAL_MS);
+
+    const response = await fetch("/api/token-refresh", { cache: "no-store" });
+    if (!response.ok) {
+      continue;
+    }
+
+    const snapshot = (await response.json().catch(() => ({}))) as TokenRefreshSnapshot;
+    if (snapshot.generatedAt && snapshot.generatedAt !== previousGeneratedAt) {
+      return;
+    }
+  }
+
+  throw new Error("Timed out waiting for token usage data refresh.");
+}
+
+function delay(milliseconds: number): Promise<void> {
+  return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
 }
 
 function formatRetryAfter(value: number | undefined): string {

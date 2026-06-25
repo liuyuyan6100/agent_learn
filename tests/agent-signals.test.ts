@@ -8,6 +8,7 @@ import {
   getRecentSignals,
   getSignalFilters,
   isAgentSignalsDatasetStale,
+  paginateSignals,
   sortSignalsByDateDesc,
   type AgentSignalsDataset
 } from "../src/lib/agent-signals";
@@ -26,6 +27,10 @@ test("SIG-002 rejects signals missing required public fields", () => {
   const missingSummary = clone(dataset);
   delete (missingSummary.signals[0] as Partial<(typeof missingSummary.signals)[number]>).summary;
   assert.throws(() => assertAgentSignalsDataset(missingSummary), /signals\.0\.summary/);
+
+  const missingIntelValue = clone(dataset);
+  delete (missingIntelValue.signals[0] as Partial<(typeof missingIntelValue.signals)[number]>).intelValue;
+  assert.throws(() => assertAgentSignalsDataset(missingIntelValue), /signals\.0\.intelValue/);
 });
 
 test("SIG-003 rejects unsupported sourceType values", () => {
@@ -89,12 +94,10 @@ test("SIG-007 sorts signals by date descending", () => {
 test("SIG-008 returns a homepage-safe recent signal preview", () => {
   const valid = assertAgentSignalsDataset(dataset);
   const recent = getRecentSignals(valid, 3);
+  const expected = sortSignalsByDateDesc(valid.signals).slice(0, 3);
 
   assert.equal(recent.length, 3);
-  assert.deepEqual(
-    recent.map((signal) => signal.date),
-    ["2026-06-22", "2026-06-21", "2026-06-20"]
-  );
+  assert.deepEqual(recent, expected);
 });
 
 test("SIG-009 accepts an empty signal dataset for UI empty state", () => {
@@ -132,6 +135,78 @@ test("SIG-012 filters signals by capability tag", () => {
   assert.ok(filters.capabilityTags.includes("evals"));
   assert.ok(evalSignals.length >= 1);
   assert.ok(evalSignals.every((signal) => signal.capabilityTags.includes("evals")));
+});
+
+test("SIG-013 requires Chinese intel summaries for public signals", () => {
+  const invalid = clone(dataset);
+  invalid.signals[0].summary = "English-only summary";
+  assert.throws(() => assertAgentSignalsDataset(invalid), /Chinese narrative string/);
+
+  const invalidIntel = clone(dataset);
+  invalidIntel.signals[0].intelValue = "English-only intel";
+  assert.throws(() => assertAgentSignalsDataset(invalidIntel), /Chinese narrative string/);
+});
+
+test("SIG-014 keeps multiple recruiting, article, product and open-source signals represented", () => {
+  const valid = assertAgentSignalsDataset(dataset);
+  const counts = new Map<string, number>();
+  for (const signal of valid.signals) {
+    counts.set(signal.sourceType, (counts.get(signal.sourceType) ?? 0) + 1);
+  }
+
+  for (const sourceType of ["job", "article", "product", "open_source"]) {
+    assert.ok((counts.get(sourceType) ?? 0) >= 2, `${sourceType} should have at least two reviewed signals`);
+  }
+});
+
+test("SIG-015 paginates signals for continued archive growth", () => {
+  const valid = assertAgentSignalsDataset(dataset);
+  const sorted = sortSignalsByDateDesc(valid.signals);
+  const firstPage = paginateSignals(sorted, 1, 8);
+  const secondPage = paginateSignals(sorted, 2, 8);
+  const overflowPage = paginateSignals(sorted, 999, 8);
+
+  assert.equal(firstPage.totalItems, valid.signals.length);
+  assert.ok(firstPage.totalItems > 20);
+  assert.equal(firstPage.totalPages, Math.ceil(valid.signals.length / 8));
+  assert.deepEqual(firstPage.items, sorted.slice(0, 8));
+  assert.deepEqual(secondPage.items, sorted.slice(8, 16));
+  assert.equal(overflowPage.currentPage, firstPage.totalPages);
+});
+
+test("SIG-016 keeps reviewed public source URLs unique", () => {
+  const valid = assertAgentSignalsDataset(dataset);
+  const urls = valid.signals.map((signal) => signal.url).filter((url): url is string => Boolean(url));
+
+  assert.equal(new Set(urls).size, urls.length);
+});
+
+test("SIG-017 enforces weighted source collection policy", () => {
+  const valid = assertAgentSignalsDataset(dataset);
+
+  assert.equal(valid.source.collectionPolicy.articleSearchWeights.overseasFamousAgentCommunities, 70);
+  assert.equal(valid.source.collectionPolicy.articleSearchWeights.chinaAgentCommunities, 30);
+  assert.equal(valid.source.collectionPolicy.jobSearchWeights.overseasJobs, 20);
+  assert.equal(valid.source.collectionPolicy.jobSearchWeights.chinaJobs, 80);
+  assert.ok(valid.source.collectionPolicy.requiredChinaJobBoards.some((board) => board.includes("BOSS")));
+  assert.ok(
+    valid.source.collectionPolicy.requiredChinaJobBoards.some(
+      (board) => board.includes("51job") || board.includes("前程无忧")
+    )
+  );
+  assert.equal(valid.source.collectionPolicy.dailyLarkDigest.enabled, true);
+  assert.equal(valid.source.collectionPolicy.dailyLarkDigest.privacyMode, "summary_only_no_raw_chat");
+});
+
+test("SIG-018 rejects drift from required source weights", () => {
+  const invalidArticleWeights = clone(dataset);
+  invalidArticleWeights.source.collectionPolicy.articleSearchWeights.overseasFamousAgentCommunities =
+    60 as AgentSignalsDataset["source"]["collectionPolicy"]["articleSearchWeights"]["overseasFamousAgentCommunities"];
+  assert.throws(() => assertAgentSignalsDataset(invalidArticleWeights), /overseasFamousAgentCommunities/);
+
+  const missingChinaJobBoard = clone(dataset);
+  missingChinaJobBoard.source.collectionPolicy.requiredChinaJobBoards = ["Lagou", "Liepin"];
+  assert.throws(() => assertAgentSignalsDataset(missingChinaJobBoard), /BOSS/);
 });
 
 function readDataset(): AgentSignalsDataset {

@@ -1,0 +1,10 @@
+[Unit]
+Description=Collect daily Agent candidates from Lark messages
+
+[Timer]
+OnCalendar=*-*-* 00:20:00
+Persistent=true
+Unit=agent-learn-lark-candidates.service
+
+[Install]
+WantedBy=timers.target

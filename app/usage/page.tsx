@@ -1,16 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import tokenUsageData from "../../data/token-usage.json";
 import { TokenUsageDashboard } from "@/src/components/token-usage-dashboard";
-import { assertTokenUsageDataset, formatDateLabel, formatTokenCount } from "@/src/lib/token-usage";
+import { readTokenUsageDataset } from "@/src/lib/token-usage-data";
+import { formatDateLabel, formatTokenCount } from "@/src/lib/token-usage";
 
 export const metadata: Metadata = {
   title: "Token Usage | Agent 工程仪表盘",
   description: "公开的 Agent token 使用趋势、模型构成和刷新状态。"
 };
 
-export default function UsagePage() {
-  const dataset = assertTokenUsageDataset(tokenUsageData);
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function UsagePage() {
+  const dataset = await readTokenUsageDataset();
 
   return (
     <main className="shell">

@@ -1,6 +1,7 @@
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { NextResponse, type NextRequest } from "next/server";
+import { readTokenUsageDataset } from "@/src/lib/token-usage-data";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -12,6 +13,21 @@ const REFRESH_COOLDOWN_SECONDS = parsePositiveInt(process.env.AGENT_LEARN_REFRES
 const SYSTEMCTL_PATH = process.env.AGENT_LEARN_SYSTEMCTL_PATH ?? "/usr/bin/systemctl";
 const TOUCH_PATH = process.env.AGENT_LEARN_TOUCH_PATH ?? "/usr/bin/touch";
 const EXEC_OPTIONS = { maxBuffer: 1024 * 1024, timeout: 5000 };
+
+export async function GET() {
+  try {
+    const dataset = await readTokenUsageDataset();
+    return NextResponse.json(
+      {
+        generatedAt: dataset.generatedAt,
+        totalTokens: dataset.totals.totalTokens
+      },
+      { headers: { "Cache-Control": "no-store, max-age=0" } }
+    );
+  } catch {
+    return NextResponse.json({ error: "Token usage data could not be read." }, { status: 500 });
+  }
+}
 
 export async function POST(request: NextRequest) {
   if (!isSameOriginRequest(request)) {

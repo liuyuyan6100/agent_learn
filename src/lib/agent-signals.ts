@@ -15,12 +15,32 @@ export interface AgentSignalsDataset {
     containsRawScrapes: false;
     containsPrivateInterviewDetails: false;
     containsLocalPaths: false;
+    collectionPolicy: AgentSignalsCollectionPolicy;
   };
   privacy: {
     publicUrlsOnly: true;
     redactedFields: string[];
   };
   signals: AgentSignal[];
+}
+
+export interface AgentSignalsCollectionPolicy {
+  articleSearchWeights: {
+    overseasFamousAgentCommunities: 70;
+    chinaAgentCommunities: 30;
+  };
+  jobSearchWeights: {
+    overseasJobs: 20;
+    chinaJobs: 80;
+  };
+  requiredChinaJobBoards: string[];
+  dailyLarkDigest: {
+    enabled: boolean;
+    cadence: "daily";
+    queryKeywords: string[];
+    output: "reviewed_signal_candidates";
+    privacyMode: "summary_only_no_raw_chat";
+  };
 }
 
 export interface AgentSignal {
@@ -31,6 +51,7 @@ export interface AgentSignal {
   title: string;
   url: string | null;
   summary: string;
+  intelValue: string;
   capabilityTags: string[];
   requirements: string[];
   currentGap: string;
@@ -42,14 +63,27 @@ const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const SOURCE_TYPES = new Set<AgentSignalSourceType>(["job", "article", "open_source", "paper", "product", "manual"]);
 const STATUSES = new Set<AgentSignalStatus>(["planned", "in_progress", "done", "skipped"]);
 const SOURCE_MODES = new Set<AgentSignalsSourceMode>(["manual_reviewed", "automated_candidates_reviewed"]);
+const LARK_DIGEST_CADENCES = new Set<AgentSignalsCollectionPolicy["dailyLarkDigest"]["cadence"]>(["daily"]);
+const LARK_DIGEST_OUTPUTS = new Set<AgentSignalsCollectionPolicy["dailyLarkDigest"]["output"]>([
+  "reviewed_signal_candidates"
+]);
+const LARK_DIGEST_PRIVACY_MODES = new Set<AgentSignalsCollectionPolicy["dailyLarkDigest"]["privacyMode"]>([
+  "summary_only_no_raw_chat"
+]);
 const FORBIDDEN_KEYS = new Set([
   "account",
   "apikey",
   "api_key",
+  "chatid",
+  "chat_id",
   "cookie",
   "email",
   "html",
   "internalproject",
+  "larkmessageid",
+  "lark_message_id",
+  "messagecontent",
+  "message_content",
   "organizationid",
   "organization_id",
   "privateinterviewdetail",
@@ -58,6 +92,8 @@ const FORBIDDEN_KEYS = new Set([
   "raw_prompt",
   "rawscrape",
   "raw_scrape",
+  "sendername",
+  "sender_name",
   "sessionpath",
   "session_path",
   "workspacepath",
@@ -68,6 +104,7 @@ const API_KEY_RE = /\b(sk-[A-Za-z0-9_-]{12,}|OPENAI_API_KEY|ANTHROPIC_API_KEY|ap
 const LOCAL_PATH_RE = /(\/home\/|\/Users\/|[A-Z]:\\|\.config\/|session[s]?\b.*\/|workspace[s]?\b.*\/)/i;
 const RAW_HTML_RE = /<!doctype html|<html[\s>]|<body[\s>]/i;
 const COOKIE_RE = /\b(document\.cookie|set-cookie:|cookie\s*[=:]|sessionid=)/i;
+const CJK_RE = /[\u3400-\u9fff]/;
 const DISPLAY_TIME_ZONE = "Asia/Shanghai";
 
 type UnknownRecord = Record<string, unknown>;
@@ -87,6 +124,8 @@ export const STATUS_LABELS: Record<AgentSignalStatus, string> = {
   done: "已完成",
   skipped: "暂缓"
 };
+
+export const AGENT_SIGNALS_PAGE_SIZE = 8;
 
 export function assertAgentSignalsDataset(value: unknown): AgentSignalsDataset {
   const dataset = asObject(value, "dataset");
@@ -183,6 +222,36 @@ export function filterSignals(
   });
 }
 
+export function paginateSignals(
+  signals: AgentSignal[],
+  page: number | undefined,
+  pageSize = AGENT_SIGNALS_PAGE_SIZE
+): {
+  items: AgentSignal[];
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  startIndex: number;
+  endIndex: number;
+} {
+  const safePageSize = Number.isFinite(pageSize) && pageSize > 0 ? Math.floor(pageSize) : AGENT_SIGNALS_PAGE_SIZE;
+  const totalItems = signals.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / safePageSize));
+  const requestedPage = Number.isFinite(page) && page !== undefined ? Math.floor(page) : 1;
+  const currentPage = Math.min(Math.max(requestedPage, 1), totalPages);
+  const startIndex = totalItems === 0 ? 0 : (currentPage - 1) * safePageSize;
+  const endIndex = Math.min(startIndex + safePageSize, totalItems);
+
+  return {
+    items: signals.slice(startIndex, endIndex),
+    currentPage,
+    totalPages,
+    totalItems,
+    startIndex,
+    endIndex
+  };
+}
+
 export function formatSignalDate(date: string): string {
   return new Intl.DateTimeFormat("zh-CN", {
     month: "short",
@@ -224,6 +293,60 @@ function assertSource(value: unknown): void {
   assertEqual(source.containsRawScrapes, false, "source.containsRawScrapes must be false");
   assertEqual(source.containsPrivateInterviewDetails, false, "source.containsPrivateInterviewDetails must be false");
   assertEqual(source.containsLocalPaths, false, "source.containsLocalPaths must be false");
+  assertCollectionPolicy(source.collectionPolicy);
+}
+
+function assertCollectionPolicy(value: unknown): void {
+  const policy = asObject(value, "source.collectionPolicy");
+  const articleWeights = asObject(policy.articleSearchWeights, "source.collectionPolicy.articleSearchWeights");
+  const jobWeights = asObject(policy.jobSearchWeights, "source.collectionPolicy.jobSearchWeights");
+  const dailyLarkDigest = asObject(policy.dailyLarkDigest, "source.collectionPolicy.dailyLarkDigest");
+
+  assertEqual(
+    articleWeights.overseasFamousAgentCommunities,
+    70,
+    "source.collectionPolicy.articleSearchWeights.overseasFamousAgentCommunities must be 70"
+  );
+  assertEqual(
+    articleWeights.chinaAgentCommunities,
+    30,
+    "source.collectionPolicy.articleSearchWeights.chinaAgentCommunities must be 30"
+  );
+  assertEqual(jobWeights.overseasJobs, 20, "source.collectionPolicy.jobSearchWeights.overseasJobs must be 20");
+  assertEqual(jobWeights.chinaJobs, 80, "source.collectionPolicy.jobSearchWeights.chinaJobs must be 80");
+  assertEqual(
+    Number(articleWeights.overseasFamousAgentCommunities) + Number(articleWeights.chinaAgentCommunities),
+    100,
+    "source.collectionPolicy.articleSearchWeights must add up to 100"
+  );
+  assertEqual(
+    Number(jobWeights.overseasJobs) + Number(jobWeights.chinaJobs),
+    100,
+    "source.collectionPolicy.jobSearchWeights must add up to 100"
+  );
+  assertStringArray(policy.requiredChinaJobBoards, "source.collectionPolicy.requiredChinaJobBoards", { minItems: 2 });
+
+  const jobBoards = (policy.requiredChinaJobBoards as string[]).map((item) => item.toLowerCase());
+  if (!jobBoards.some((item) => item.includes("boss"))) {
+    throw new Error("source.collectionPolicy.requiredChinaJobBoards must include BOSS");
+  }
+  if (!jobBoards.some((item) => item.includes("51job") || item.includes("前程无忧"))) {
+    throw new Error("source.collectionPolicy.requiredChinaJobBoards must include 51job");
+  }
+
+  if (typeof dailyLarkDigest.enabled !== "boolean") {
+    throw new Error("source.collectionPolicy.dailyLarkDigest.enabled must be boolean");
+  }
+  assertEnum(dailyLarkDigest.cadence, LARK_DIGEST_CADENCES, "source.collectionPolicy.dailyLarkDigest.cadence");
+  assertStringArray(dailyLarkDigest.queryKeywords, "source.collectionPolicy.dailyLarkDigest.queryKeywords", {
+    minItems: 1
+  });
+  assertEnum(dailyLarkDigest.output, LARK_DIGEST_OUTPUTS, "source.collectionPolicy.dailyLarkDigest.output");
+  assertEnum(
+    dailyLarkDigest.privacyMode,
+    LARK_DIGEST_PRIVACY_MODES,
+    "source.collectionPolicy.dailyLarkDigest.privacyMode"
+  );
 }
 
 function assertPrivacy(value: unknown): void {
@@ -249,7 +372,8 @@ function assertSignal(value: unknown, path: string): void {
   assertString(signal.sourceName, `${path}.sourceName`);
   assertString(signal.title, `${path}.title`);
   assertNullablePublicUrl(signal.url, `${path}.url`);
-  assertString(signal.summary, `${path}.summary`);
+  assertChineseNarrativeString(signal.summary, `${path}.summary`);
+  assertChineseNarrativeString(signal.intelValue, `${path}.intelValue`);
   assertStringArray(signal.capabilityTags, `${path}.capabilityTags`, { minItems: 1 });
   assertStringArray(signal.requirements, `${path}.requirements`, { minItems: 1 });
   assertString(signal.currentGap, `${path}.currentGap`);
@@ -313,6 +437,13 @@ function asObject(value: unknown, path: string): UnknownRecord {
 function assertString(value: unknown, path: string): void {
   if (typeof value !== "string" || value.trim().length === 0) {
     throw new Error(`${path} must be a non-empty string`);
+  }
+}
+
+function assertChineseNarrativeString(value: unknown, path: string): void {
+  assertString(value, path);
+  if (typeof value !== "string" || !CJK_RE.test(value)) {
+    throw new Error(`${path} must be a Chinese narrative string`);
   }
 }
 

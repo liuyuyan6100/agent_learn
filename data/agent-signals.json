@@ -1,16 +1,34 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-22T10:30:00.000Z",
+  "generatedAt": "2026-06-25T15:20:00.000Z",
   "period": {
     "start": "2026-06-17",
-    "end": "2026-06-22",
+    "end": "2026-06-25",
     "timezone": "Asia/Shanghai"
   },
   "source": {
-    "mode": "manual_reviewed",
+    "mode": "automated_candidates_reviewed",
     "containsRawScrapes": false,
     "containsPrivateInterviewDetails": false,
-    "containsLocalPaths": false
+    "containsLocalPaths": false,
+    "collectionPolicy": {
+      "articleSearchWeights": {
+        "overseasFamousAgentCommunities": 70,
+        "chinaAgentCommunities": 30
+      },
+      "jobSearchWeights": {
+        "overseasJobs": 20,
+        "chinaJobs": 80
+      },
+      "requiredChinaJobBoards": ["BOSS 直聘", "51job / 前程无忧"],
+      "dailyLarkDigest": {
+        "enabled": true,
+        "cadence": "daily",
+        "queryKeywords": ["agent", "AI Agent", "智能体", "多智能体", "MCP", "workflow"],
+        "output": "reviewed_signal_candidates",
+        "privacyMode": "summary_only_no_raw_chat"
+      }
+    }
   },
   "privacy": {
     "publicUrlsOnly": true,
@@ -21,6 +39,10 @@
       "organizationId",
       "rawPrompt",
       "rawScrape",
+      "messageContent",
+      "larkMessageId",
+      "chatId",
+      "senderName",
       "html",
       "cookie",
       "sessionPath",
@@ -31,20 +53,381 @@
   },
   "signals": [
     {
+      "id": "2026-06-25-openai-codex-agent-systems-role",
+      "date": "2026-06-25",
+      "sourceType": "job",
+      "sourceName": "OpenAI Careers",
+      "title": "Codex agent systems roles connect harness, runtime and model behavior",
+      "url": "https://openai.com/careers/ai-systems-engineer-codex-agents-san-francisco/",
+      "summary": "OpenAI 的 Codex Agents 岗位把 agent harness、模型输出解释、安全执行、生产反馈、评估和调试系统放在同一个工程职责里。",
+      "intelValue": "这条招聘信号说明 coding agent 岗位已经从写 prompt 扩展到系统工程：要能分辨模型行为、harness 问题、运行时问题和产品失败。",
+      "capabilityTags": ["agent_runtime", "harness", "evals", "agentic_coding", "debugging"],
+      "requirements": [
+        "能建立区分模型、运行时、产品和工具环境问题的调试体系。",
+        "能把生产经验反馈到模型行为和 Agent harness 的迭代中。"
+      ],
+      "currentGap": "当前项目已有数据校验和构建验证，但还没有面向 coding agent 行为的分层调试记录。",
+      "nextAction": "后续把 debugging 加入能力标签，并设计一条失败归因记录格式。",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-25-pagerduty-production-agents",
+      "date": "2026-06-25",
+      "sourceType": "article",
+      "sourceName": "PagerDuty Engineering",
+      "title": "Production AI agents need explicit gaps between prototype and reality",
+      "url": "https://www.pagerduty.com/eng/production-ai-agents-closing-the-gaps-between-idea-and-reality/",
+      "summary": "PagerDuty 工程文章讨论 AI Agent 从原型走向生产时的落差，强调可靠性、可观测性、运行边界和真实系统集成比演示效果更难。",
+      "intelValue": "这条文章对日报的价值在于补充生产化视角：如果只记录工具和框架，会漏掉从 demo 到可运行系统之间的工程债。",
+      "capabilityTags": ["production_readiness", "observability", "system_design", "reliability"],
+      "requirements": [
+        "能识别 Agent 原型进入生产时的主要风险和缺口。",
+        "能把可靠性、监控、故障处理和系统集成纳入 Agent 设计。"
+      ],
+      "currentGap": "当前 Signals 已有很多技术来源，但还需要更多从生产事故和运维角度提炼出的判断。",
+      "nextAction": "后续在周总结里单独整理 production_readiness 主题。",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-25-devin-autonomous-software-engineer",
+      "date": "2026-06-25",
+      "sourceType": "product",
+      "sourceName": "Cognition Devin",
+      "title": "Devin positions cloud coding agents as delegated engineering teammates",
+      "url": "https://devin.ai/",
+      "summary": "Devin 的公开产品页面把 AI 软件工程师定位为可以处理大型迁移、重复重构和工程任务的云端 Agent，强调并行执行和团队级委派。",
+      "intelValue": "这条产品信号和 Copilot、Cursor、Replit 形成互补：coding agent 正在从 IDE 辅助走向可被分配工作的云端工程队友。",
+      "capabilityTags": ["agentic_coding", "developer_tools", "delegation", "human_review"],
+      "requirements": [
+        "能判断哪些工程任务适合委派给云端 Agent，哪些必须人工主导。",
+        "能设计大型改动中的分批验收、回滚和结果审查流程。"
+      ],
+      "currentGap": "当前公开项目还没有展示大型重构或迁移类 Agent 协作复盘。",
+      "nextAction": "后续把 coding agent 产品按 IDE 辅助、PR 代理、云端队友三类归档。",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-25-microsoft-agent-framework",
+      "date": "2026-06-25",
+      "sourceType": "open_source",
+      "sourceName": "Microsoft Agent Framework",
+      "title": "Microsoft Agent Framework consolidates production-grade multi-agent workflows",
+      "url": "https://github.com/microsoft/agent-framework",
+      "summary": "Microsoft Agent Framework 的开源仓库把生产级 AI Agent、多 Agent 工作流和跨语言支持放在统一框架里，承接了 Semantic Kernel 和 AutoGen 的工程经验。",
+      "intelValue": "这条开源信号说明主流平台正在收敛：Agent 框架不只是实验仓库，而是在向统一运行时、工具接入和多语言生产支持靠拢。",
+      "capabilityTags": ["multi_agent", "workflow_orchestration", "agent_runtime", "integration"],
+      "requirements": [
+        "能比较不同 Agent 框架在运行时、工具接入、多 Agent 协作和部署上的取舍。",
+        "能识别框架统一后对迁移和长期维护的影响。"
+      ],
+      "currentGap": "当前经验地图还没有正式列出框架对比维度。",
+      "nextAction": "后续把 Microsoft Agent Framework 纳入多 Agent 框架对比表。",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-25-anthropic-context-engineering",
+      "date": "2026-06-25",
+      "sourceType": "article",
+      "sourceName": "Anthropic Engineering",
+      "title": "Effective context engineering for AI agents",
+      "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
+      "summary": "Anthropic 的工程文章把 Agent 可靠性问题推进到上下文管理层，强调上下文是有限资源，需要被选择、压缩、隔离和持续维护。",
+      "intelValue": "这条文章补上了工具调用之外的关键维度：Agent 能否稳定工作，很大程度取决于它如何获得正确上下文，而不是简单堆更多 token。",
+      "capabilityTags": ["context_engineering", "memory", "agentic_coding", "reliability"],
+      "requirements": [
+        "能区分提示词、检索结果、工具状态和长期记忆在上下文里的作用。",
+        "能为长任务 Agent 设计上下文选择、压缩和失效策略。"
+      ],
+      "currentGap": "当前 dashboard 展示了 token 强度，但还没有说明上下文质量如何影响 Agent 结果。",
+      "nextAction": "后续把 context_engineering 加到经验地图，并和 token 使用趋势做一条解释性笔记。",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-25-build-harness-evals-role",
+      "date": "2026-06-25",
+      "sourceType": "job",
+      "sourceName": "Build Technologies / Ashby",
+      "title": "Harness and eval roles make reliability a first-class agent engineering responsibility",
+      "url": "https://jobs.ashbyhq.com/build/cdf0c29b-157e-4b85-a767-e72211022c96",
+      "summary": "Build Technologies 的公开岗位把 Agent 可靠性、可观测性、可扩展性和安全性放在 high-stakes workflow 的交付要求里，岗位名直接强调 harness 与 evals。",
+      "intelValue": "这条招聘信号说明市场正在把 Agent 工程从“会做功能”提升到“会建验证和运行环境”，harness engineering 本身成为岗位能力。",
+      "capabilityTags": ["evals", "observability", "harness", "reliability"],
+      "requirements": [
+        "能为 Agent 工作流建立评估 harness，而不是只写一次性 demo。",
+        "能把可靠性、安全性和可扩展性指标接入真实业务流程。"
+      ],
+      "currentGap": "当前项目已有隐私扫描和数据校验，但还没有针对 Agent 行为的 harness 示例。",
+      "nextAction": "把 harness 作为 eval 模块的命名候选，后续设计最小 Agent 任务回归集。",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-25-replit-agent-production-apps",
+      "date": "2026-06-25",
+      "sourceType": "product",
+      "sourceName": "Replit Agent",
+      "title": "Replit Agent packages app building, deployment and iteration behind natural language",
+      "url": "https://docs.replit.com/references/agent/overview",
+      "summary": "Replit Agent 文档把自然语言生成应用、迭代、发布和协作放在同一个产品流程里，强调从想法到可分享应用的闭环。",
+      "intelValue": "这条产品信号和 Cursor、Copilot 形成对照：coding agent 正在从代码编辑器扩展到完整应用交付链路，部署和分享也成为默认能力。",
+      "capabilityTags": ["agentic_coding", "deployment", "developer_tools", "workflow_orchestration"],
+      "requirements": [
+        "能观察 coding agent 如何把需求、实现、运行环境和发布串起来。",
+        "能判断自动生成应用的验收点，包括功能、部署、隐私和可维护性。"
+      ],
+      "currentGap": "当前公开项目有部署链路，但还没有整理出从想法到上线的 Agent-assisted 交付复盘。",
+      "nextAction": "后续用小功能改动复盘一次从需求、实现、验证到部署的 Agent 协作路径。",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-25-pydantic-ai-typed-agents",
+      "date": "2026-06-25",
+      "sourceType": "open_source",
+      "sourceName": "Pydantic AI",
+      "title": "Pydantic AI brings typed application patterns into agent frameworks",
+      "url": "https://github.com/pydantic/pydantic-ai",
+      "summary": "Pydantic AI 的开源仓库把 Agent 框架与 Python 类型、结构化输出和生产级应用开发连接起来，强调快速但可控地构建工作流。",
+      "intelValue": "这条开源信号补充了框架谱系里的类型安全视角：Agent 工程不仅要会调工具，也要让输入输出契约、校验和错误处理更清晰。",
+      "capabilityTags": ["structured_outputs", "type_safety", "tool_calling", "system_design"],
+      "requirements": [
+        "能用类型和 schema 限制 Agent 输入输出，而不是只依赖自然语言约定。",
+        "能把结构化输出失败、重试和错误展示纳入工程设计。"
+      ],
+      "currentGap": "当前 JSON schema 已保护公开数据，但还没有把同样的类型约束用于 Agent demo。",
+      "nextAction": "后续把 Pydantic AI 和当前 TypeScript schema 思路做一次跨语言对比。",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-25-crewai-agent-orchestration",
+      "date": "2026-06-25",
+      "sourceType": "open_source",
+      "sourceName": "CrewAI",
+      "title": "CrewAI keeps role-based multi-agent orchestration visible in open source",
+      "url": "https://github.com/crewAIInc/crewAI",
+      "summary": "CrewAI 的开源仓库继续把 multi-agent 自动化放在角色、任务和流程编排上，强调速度、灵活性和可控性，而不是把所有能力塞进一个单体 Agent。",
+      "intelValue": "这条开源信号能补足 LangGraph 偏状态恢复的视角：多 Agent 工程还需要角色边界、任务拆分和编排策略，否则很容易变成不可解释的对话流。",
+      "capabilityTags": ["multi_agent", "workflow_orchestration", "role_design", "tool_calling"],
+      "requirements": [
+        "能把多 Agent 流程里的角色、任务和交接关系显式写出来。",
+        "能判断什么时候多角色编排有收益，什么时候会增加调试成本。"
+      ],
+      "currentGap": "当前 Signals 已记录 AutoGen、LangGraph 和 Agents SDK，但还缺一条横向比较这些框架的整理。",
+      "nextAction": "把 AutoGen、LangGraph、CrewAI 和 Agents SDK 放进后续经验地图的多 Agent 对比表。",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-25-github-copilot-coding-agent",
+      "date": "2026-06-25",
+      "sourceType": "product",
+      "sourceName": "GitHub Copilot",
+      "title": "Copilot coding agent turns GitHub issues into reviewable pull requests",
+      "url": "https://github.blog/news-insights/product-news/github-copilot-meet-the-new-coding-agent/",
+      "summary": "GitHub 的公开产品文章把 coding agent 放进 issue、云端开发环境、提交代码和 pull request 审查流程里，突出任务委派和可审查交付。",
+      "intelValue": "这条产品信号说明 coding agent 正在贴近开发团队的既有工作流：关键不是让模型直接改完一切，而是让输出进入 PR、CI 和人工 review。",
+      "capabilityTags": ["agentic_coding", "developer_tools", "human_review", "deployment"],
+      "requirements": [
+        "理解 issue 到 pull request 的 Agent 任务闭环，以及每一步的人工验收点。",
+        "能把自动生成代码纳入测试、构建和审查，而不是只看本地对话结果。"
+      ],
+      "currentGap": "当前页面展示了日报和 token 强度，但还没有展示一次 issue 到 PR 的 coding agent 工作流复盘。",
+      "nextAction": "后续挑一个低风险改动，用公开复盘记录 coding agent 如何产出、验证和被审查。",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-25-glean-agentic-runtime",
+      "date": "2026-06-25",
+      "sourceType": "job",
+      "sourceName": "Glean / Greenhouse",
+      "title": "Agentic Runtime roles expose memory, routing, streaming and safety as core infrastructure",
+      "url": "http://job-boards.greenhouse.io/gleanwork/jobs/4616929005",
+      "summary": "Glean 的公开岗位把 Agentic Runtime 拆成多轮编排、工具调用、模型路由、记忆、流式输出和安全等运行时能力，说明企业 Agent 需要专门的基础设施层。",
+      "intelValue": "这条招聘信号把岗位要求从应用层推进到 runtime 层：真正可用的 Agent 不只是调用工具，还要稳定管理状态、路由模型、处理安全和用户体验。",
+      "capabilityTags": ["agent_runtime", "tool_calling", "memory", "safety", "streaming"],
+      "requirements": [
+        "理解 Agent runtime 如何承载多轮状态、模型选择、工具调用和输出流。",
+        "能把安全边界和运行时行为写成可观察、可测试的系统契约。"
+      ],
+      "currentGap": "当前项目有状态文件和刷新任务，但还没有把这些运行时概念映射到 Agent 架构说明里。",
+      "nextAction": "在经验地图中新增 agent_runtime 标签，后续和 durable_execution、observability 一起整理。",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-25-humanlayer-12-factor-agents",
+      "date": "2026-06-25",
+      "sourceType": "article",
+      "sourceName": "HumanLayer",
+      "title": "12-Factor Agents reframes reliable agents as maintainable software systems",
+      "url": "https://www.humanlayer.dev/blog/12-factor-agents",
+      "summary": "HumanLayer 的 12-Factor Agents 文章把可靠 Agent 归纳成可维护软件系统的工程原则，强调结构化工具调用、控制流、上下文管理和人工反馈。",
+      "intelValue": "这条文章的价值在于把 Agent 从框架崇拜拉回软件工程基本功：可读状态、明确控制流、可测试边界和人工介入，比盲目追求自主性更可靠。",
+      "capabilityTags": ["system_design", "tool_calling", "human_review", "reliability"],
+      "requirements": [
+        "能把 Agent 设计拆成上下文、工具、状态、控制流和人类反馈等可维护部件。",
+        "能识别框架抽象过深时带来的调试和可观测性成本。"
+      ],
+      "currentGap": "当前 Signals 已能记录工程趋势，但还缺一个把这些原则落成代码结构的公开样例。",
+      "nextAction": "后续用 12-Factor Agents 作为评审清单，反查当前 dashboard 和未来 Agent demo 的结构。",
+      "status": "in_progress"
+    },
+    {
+      "id": "2026-06-25-anthropic-agent-evals",
+      "date": "2026-06-25",
+      "sourceType": "article",
+      "sourceName": "Anthropic Engineering",
+      "title": "Demystifying evals for AI agents",
+      "url": "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents",
+      "summary": "Anthropic 的工程文章把 Agent 评估拆成更接近生产现实的组合策略，强调不能只靠上线后补救，也不能只用单一离线指标判断复杂 Agent。",
+      "intelValue": "这条文章把 evals 从抽象口号落到工程治理：复杂 Agent 的质量需要分层评估、场景样例和持续反馈，正好能作为日报后续评估模块的设计依据。",
+      "capabilityTags": ["evals", "observability", "agentic_coding", "quality_gates"],
+      "requirements": [
+        "能把 Agent 失败拆成工具调用、规划、状态管理和输出质量等可评估维度。",
+        "能区分离线回归、线上监控和人工复审各自适合发现的问题。"
+      ],
+      "currentGap": "当前数据集有趋势信号，但还没有把评估维度固化成可复用的公开字段。",
+      "nextAction": "为后续 eval JSON 契约补一组 Agent 失败分类草案。",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-25-dataiku-generative-ai-engineer",
+      "date": "2026-06-25",
+      "sourceType": "job",
+      "sourceName": "Dataiku / Greenhouse",
+      "title": "Generative AI Engineer roles require agentic systems and production governance",
+      "url": "http://job-boards.greenhouse.io/dataiku/jobs/6002762004",
+      "summary": "Dataiku 的公开岗位把 agentic AI、多 Agent 编排、工具链、自治决策和生产部署放在同一个能力面里，说明企业侧更关注可治理的 Agent 系统。",
+      "intelValue": "这条招聘信号补充了上一条岗位观察：Agent 工程岗位不只是做原型，还要把编排、部署和治理纳入交付责任。",
+      "capabilityTags": ["multi_agent", "workflow_orchestration", "deployment", "governance"],
+      "requirements": [
+        "能设计多 Agent 或工具链流程，并说明它们如何被部署和治理。",
+        "能把自治决策限制在可解释、可回滚、可审计的范围内。"
+      ],
+      "currentGap": "当前公开页面能说明信号和趋势，但还缺一个治理视角的 Agent 工作流例子。",
+      "nextAction": "把 governance 作为新能力标签观察，后续和隐私边界、日志、审批流放在一起整理。",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-25-cursor-agentic-development",
+      "date": "2026-06-25",
+      "sourceType": "product",
+      "sourceName": "Cursor",
+      "title": "Cursor frames coding tools as agent-native development",
+      "url": "https://cursor.com/",
+      "summary": "Cursor 的公开产品页面把开发体验描述为把任务交给 coding agent，再由开发者做决策和把关，说明 IDE 产品正在向 Agent 原生工作流转移。",
+      "intelValue": "这条产品信号说明 Agentic coding 的竞争点不只在补全，而在任务委派、并行处理、上下文保持和最终人工验收。",
+      "capabilityTags": ["agentic_coding", "developer_tools", "workflow_orchestration", "human_review"],
+      "requirements": [
+        "能描述 coding agent 在需求拆解、改代码、跑验证和提交结果中的边界。",
+        "能设计人工验收点，避免把自动改动直接当成可信输出。"
+      ],
+      "currentGap": "当前 dashboard 能展示使用强度，但还没有展示 coding agent 任务委派和验收流程。",
+      "nextAction": "后续把一次小型 coding agent 任务整理成公开复盘条目。",
+      "status": "in_progress"
+    },
+    {
+      "id": "2026-06-25-langgraph-durable-agents",
+      "date": "2026-06-25",
+      "sourceType": "open_source",
+      "sourceName": "LangGraph",
+      "title": "LangGraph centers durable execution for resilient agent workflows",
+      "url": "https://github.com/langchain-ai/langgraph",
+      "summary": "LangGraph 的开源仓库强调持久执行、故障恢复、长时间运行和 human-in-the-loop，这些能力把 Agent 工作流从脚本推进到可恢复系统。",
+      "intelValue": "这条开源信号的价值在于提醒后续实验不能只看一次运行是否成功，还要看中断、重试、人工介入和状态恢复这些工程问题。",
+      "capabilityTags": ["workflow_orchestration", "durable_execution", "human_review", "observability"],
+      "requirements": [
+        "理解长任务 Agent 为什么需要状态持久化和恢复机制。",
+        "能为人工介入点和失败重试设计清晰的状态模型。"
+      ],
+      "currentGap": "当前计划看板有状态持久化，但还没有把这个经验迁移到 Agent 工作流实现里。",
+      "nextAction": "把 durable execution 加入经验地图，并和计划看板状态文件做一次工程类比。",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-25-agent-engineering-observability",
+      "date": "2026-06-25",
+      "sourceType": "article",
+      "sourceName": "LangChain",
+      "title": "State of Agent Engineering highlights observability before eval maturity",
+      "url": "https://www.langchain.com/state-of-agent-engineering",
+      "summary": "LangChain 的公开行业报告把 Agent 工程从原型讨论推进到生产治理讨论，重点强调可观测性、评估、部署和多模型协作这些工程控制面。",
+      "intelValue": "这条信号的价值在于提醒日报不能只记录工具名，还要持续观察团队如何把 Agent 放进可调试、可评估、可上线的系统里。",
+      "capabilityTags": ["observability", "evals", "deployment", "agentic_coding"],
+      "requirements": [
+        "能够解释 trace、日志、指标和人工评审在 Agent 调试中的分工。",
+        "把外部报告中的趋势转成可执行的项目改进项。"
+      ],
+      "currentGap": "当前 Signals 已能记录情报，但还缺一套公开的趋势复盘模板，用来对比不同报告里的共识和偏差。",
+      "nextAction": "把 observability 和 evals 相关信号合并成后续周总结材料。",
+      "status": "in_progress"
+    },
+    {
+      "id": "2026-06-25-applied-ai-engineer-jd",
+      "date": "2026-06-25",
+      "sourceType": "job",
+      "sourceName": "Future / Greenhouse",
+      "title": "Applied AI Engineer roles emphasize tool calling, structured output and evaluation",
+      "url": "http://job-boards.greenhouse.io/future/jobs/4683133005",
+      "summary": "公开招聘页面把真实用户场景里的 AI Agent 交付拆成 tool calling、结构化输出、评估和上线维护，说明岗位要求正在靠近产品化自动化。",
+      "intelValue": "这条招聘信号说明市场并不只奖励会调模型的人，更看重能把 Agent 接到真实流程、定义质量门槛并持续维护的人。",
+      "capabilityTags": ["tool_calling", "evals", "deployment", "structured_outputs"],
+      "requirements": [
+        "能把工具调用和结构化输出设计成稳定接口。",
+        "能为 Agent 行为建立回归评估和失败样例记录。"
+      ],
+      "currentGap": "公开作品里已有 token 与 Signals 看板，但还缺一个面向真实工作流的结构化输出小 demo。",
+      "nextAction": "从日报候选中挑一个低风险流程，设计 tool calling + structured output 的最小样例。",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-24-google-adk-production-agents",
+      "date": "2026-06-24",
+      "sourceType": "product",
+      "sourceName": "Google Agent Development Kit",
+      "title": "ADK frames agents as debuggable, deployable and evaluable systems",
+      "url": "https://adk.dev/",
+      "summary": "Google ADK 公开页面把 Agent 开发描述为从提示词和工具调用起步，逐步扩展到多 Agent 编排、图式工作流、性能评估和部署。",
+      "intelValue": "这条产品信号继续确认平台方向：Agent 工程竞争点正在从能不能跑，转向能不能调试、评估、部署和跨语言维护。",
+      "capabilityTags": ["workflow_orchestration", "tool_calling", "evals", "deployment"],
+      "requirements": [
+        "理解单 Agent、图式工作流和多 Agent 编排的适用边界。",
+        "把评估和部署设计成开发流程的一部分，而不是上线后的补丁。"
+      ],
+      "currentGap": "当前项目有公开展示和数据校验，但还没有把某个 Agent 工作流描述成可部署单元。",
+      "nextAction": "继续收集 ADK、Agents SDK 和 MCP 的共同能力，沉淀成经验地图里的平台对比项。",
+      "status": "planned"
+    },
+    {
+      "id": "2026-06-23-openai-agents-sdk-workflows",
+      "date": "2026-06-23",
+      "sourceType": "open_source",
+      "sourceName": "OpenAI Agents SDK",
+      "title": "Agents SDK makes handoffs, guardrails and sessions explicit workflow primitives",
+      "url": "https://github.com/openai/openai-agents-python",
+      "summary": "OpenAI Agents SDK 的公开仓库和文档把 Agent、Runner、handoffs、guardrails、sessions 和工具调用组织成可组合的工作流构件。",
+      "intelValue": "这条开源信号的价值在于提供了一个可以拆解的实现参照：复杂 Agent 不是靠长提示词堆出来，而是靠明确的状态、交接和保护边界组织起来。",
+      "capabilityTags": ["agentic_coding", "workflow_orchestration", "guardrails", "tool_calling"],
+      "requirements": [
+        "能说明 handoff、tool call、session state 和 guardrail 各自解决什么问题。",
+        "能在小型项目里把这些概念压缩成可读、可测试的实现。"
+      ],
+      "currentGap": "当前日报只记录外部信号，还没有把一个 SDK 的核心抽象转成自己的小型代码实验。",
+      "nextAction": "后续为 Agents SDK 或同类框架写一条最小工作流拆解笔记。",
+      "status": "planned"
+    },
+    {
       "id": "2026-06-22-agent-patterns",
       "date": "2026-06-22",
       "sourceType": "article",
       "sourceName": "Anthropic Engineering",
       "title": "Building effective agents",
       "url": "https://www.anthropic.com/engineering/building-effective-agents",
-      "summary": "A public engineering article frames agents as systems that combine model calls, tools, workflow control and feedback loops.",
+      "summary": "公开工程文章把 Agent 定义为由模型调用、工具使用、流程控制和反馈回路组成的系统，而不是单次对话技巧。",
+      "intelValue": "这类文章的价值不在观点新，而在它反复确认了行业共识：单兵 Agent 要强，核心不只是模型能力，还要会调工具、会控流程、会处理失败。",
       "capabilityTags": ["tool_calling", "workflow_orchestration", "system_design"],
       "requirements": [
-        "Choose simple workflow patterns before adding open-ended agent autonomy.",
-        "Make tool boundaries and failure handling explicit in the system design."
+        "在引入开放式 Agent 自主性之前，先优先选择简单稳定的流程模式。",
+        "在系统设计里把工具边界和失败处理策略写清楚。"
       ],
-      "currentGap": "Need a public workflow example that shows when a fixed workflow is enough and when an agent loop is justified.",
-      "nextAction": "Use the first Agent Signals page to track workflow patterns and link them to future experiments.",
+      "currentGap": "还缺一个公开的流程示例，能够说明什么时候固定工作流已经够用，什么时候才值得上 Agent 循环。",
+      "nextAction": "继续用 Agent Signals 页面沉淀流程模式，并把它们接到后续实验里。",
       "status": "in_progress"
     },
     {
@@ -54,14 +437,15 @@
       "sourceName": "Model Context Protocol",
       "title": "MCP turns tool access into a stable agent interface",
       "url": "https://modelcontextprotocol.io/introduction",
-      "summary": "MCP documentation makes a strong case for standardizing how agents discover tools, data sources and execution context.",
+      "summary": "MCP 文档强调，Agent 要稳定接工具、接数据、接执行上下文，必须有统一接口，而不是每个系统各写一套胶水代码。",
+      "intelValue": "这说明侦察兵不该只会搜内容，还要能稳定挂接外部能力。后面日报自动化增强时，搜索、抓取、抽取、总结这些动作都应该走可替换的标准接口。",
       "capabilityTags": ["mcp", "tool_calling", "integration"],
       "requirements": [
-        "Understand how agent tools are described, authorized and invoked across clients.",
-        "Design integrations with a contract that can survive tool and client changes."
+        "理解 Agent 工具如何在不同客户端中被描述、授权和调用。",
+        "把集成设计成可以承受工具和客户端变化的稳定契约。"
       ],
-      "currentGap": "Need a small documented MCP-style integration example or comparison against current CLI automation.",
-      "nextAction": "Add MCP to the experience map after the signals module is live.",
+      "currentGap": "还缺一个小型且写得清楚的 MCP 风格集成示例，或者与当前 CLI 自动化的对比样例。",
+      "nextAction": "等 signals 模块稳定后，把 MCP 接入经验地图。",
       "status": "planned"
     },
     {
@@ -71,14 +455,15 @@
       "sourceName": "Manual note",
       "title": "Coding agents need repeatable evaluation, not only demos",
       "url": null,
-      "summary": "Recent coding-agent practice suggests that visible productivity gains need a repeatable eval loop to stay trustworthy.",
+      "summary": "近期 coding agent 的实践反复说明，只有演示效果不够，必须配套可重复评估，效率提升才可信。",
+      "intelValue": "日报这个侦察兵后面做强，一定不能只会搜和写摘要，还要知道自己抓回来的情报是否真有价值。评估机制就是侦察兵的命中率校准器。",
       "capabilityTags": ["evals", "agentic_coding", "observability"],
       "requirements": [
-        "Define small task suites that can be rerun after model, prompt or tool changes.",
-        "Record failure modes in a structured format that can feed later improvements."
+        "定义可以在模型、提示词或工具变更后重复执行的小型任务集。",
+        "把失败模式记录成结构化格式，供后续迭代使用。"
       ],
-      "currentGap": "Token telemetry is live, but there is not yet a public eval record connected to the dashboard.",
-      "nextAction": "Design a minimal eval JSON contract after Agent Signals reaches MVP.",
+      "currentGap": "Token telemetry 已经上线，但还没有和仪表盘相连的公开 eval 记录。",
+      "nextAction": "等 Agent Signals 达到稳定版后，设计最小 eval JSON 契约。",
       "status": "planned"
     },
     {
@@ -88,14 +473,15 @@
       "sourceName": "OpenAI",
       "title": "Agent platforms are converging on tools, tracing and deployable workflows",
       "url": "https://openai.com/index/new-tools-for-building-agents/",
-      "summary": "Public product updates around agent building emphasize hosted tools, orchestration, tracing and deployment paths.",
+      "summary": "公开产品更新越来越强调工具、编排、追踪和可部署工作流，说明 Agent 平台已经从演示阶段转向工程阶段。",
+      "intelValue": "这条信号很关键，它告诉我们侦察兵搜回来的信息不能停在“发现了什么”，还要补上“怎么接进工程系统、怎么观察、怎么上线”这层判断。",
       "capabilityTags": ["tool_calling", "observability", "deployment"],
       "requirements": [
-        "Treat tracing and inspection as core agent engineering features.",
-        "Separate prototype prompts from deployable workflow contracts."
+        "把 tracing 和 inspection 当成 Agent 工程的核心能力，而不是附属功能。",
+        "把原型期 prompt 和可部署工作流契约分开管理。"
       ],
-      "currentGap": "The dashboard shows token telemetry, but not yet workflow traces or deployment notes.",
-      "nextAction": "Keep observability as a recurring capability tag and connect it to future project notes.",
+      "currentGap": "当前 dashboard 已经有 token telemetry，但还没有工作流 trace 和部署笔记这层内容。",
+      "nextAction": "把 observability 保持成长期能力标签，并接到后续项目说明里。",
       "status": "in_progress"
     },
     {
@@ -105,14 +491,15 @@
       "sourceName": "Microsoft AutoGen",
       "title": "Multi-agent frameworks need clear role boundaries",
       "url": "https://github.com/microsoft/autogen",
-      "summary": "Open-source multi-agent frameworks show how quickly coordination, role design and observability become system concerns.",
+      "summary": "开源 multi-agent 框架表明，一旦角色数量变多，协作关系、职责边界和可观测性会立刻从实现细节升级成系统问题。",
+      "intelValue": "这对日报模块的启发是：单兵侦察要强，但不是无限堆角色。先把单兵搜索、抽取、中文总结做扎实，再考虑多 agent 分工，工程收益更高。",
       "capabilityTags": ["multi_agent", "workflow_orchestration", "observability"],
       "requirements": [
-        "Model agent roles and handoffs explicitly instead of relying on implicit chat flow.",
-        "Log enough state to debug coordination failures."
+        "显式建模 Agent 角色和交接关系，而不是依赖隐式对话流。",
+        "记录足够状态，便于排查协作失败。"
       ],
-      "currentGap": "Need one public comparison between a single-agent workflow and a multi-agent workflow.",
-      "nextAction": "Track multi-agent examples as signals before deciding whether to build a demo.",
+      "currentGap": "还缺一个公开对比案例，说明单 Agent 工作流和多 Agent 工作流各自适合什么场景。",
+      "nextAction": "先继续跟踪 multi-agent 例子，再决定是否值得做 demo。",
       "status": "planned"
     },
     {
@@ -122,14 +509,15 @@
       "sourceName": "Public job-posting review",
       "title": "Agent engineer roles ask for productized automation and evaluation",
       "url": null,
-      "summary": "Public role descriptions repeatedly connect LLM agents with tool integration, workflow automation, evaluation and deployment ownership.",
+      "summary": "公开岗位描述反复把 Agent 工程与工具集成、流程自动化、评估机制和部署责任绑定在一起。",
+      "intelValue": "这意味着日报这个侦察兵如果后期要成为真正的信息源，不能只会摘录文章，还得能把外部信号快速翻译成工程能力清单和行动方向。",
       "capabilityTags": ["workflow_orchestration", "evals", "deployment"],
       "requirements": [
-        "Show deployed systems rather than isolated prompts.",
-        "Explain data flow, privacy boundaries and operational failure modes."
+        "展示已经部署的系统，而不是孤立的 prompt 样例。",
+        "把数据流、隐私边界和运行故障模式讲清楚。"
       ],
-      "currentGap": "The public dashboard has deployment and token telemetry, but needs a visible learning-signal loop.",
-      "nextAction": "Ship the Agent Signals module as the next proof point.",
+      "currentGap": "公开 dashboard 已经有部署和 token telemetry，但还缺一条可见的学习信号闭环。",
+      "nextAction": "把 Agent Signals 模块作为下一个公开证明点继续做深。",
       "status": "in_progress"
     }
   ]

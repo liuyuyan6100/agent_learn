@@ -371,6 +371,7 @@ export interface TokenUsageMilestone {
 | TUD-013 | CLI | `tokscale` 输出不是合法 JSON | 采集脚本失败退出，不覆盖上一份有效公开数据 |
 | TUD-014 | CLI | `tokscale` 输出包含未知模型名 | 保留原始公开 `modelName`，`modelCategory` 置为 `unknown` |
 | TUD-015 | 构建 | 运行构建后扫描静态产物 | 不包含敏感字段或本机路径 |
+| TUD-016 | 刷新 | 采集脚本更新部署目录中的 `data/token-usage.json` | 浏览器刷新 `/usage` 即可看到新数据，无需重新构建应用 |
 
 ## 7. 验收标准
 
@@ -380,11 +381,12 @@ export interface TokenUsageMilestone {
 - 首页模型构成展示 `modelName`，不是只展示 `modelCategory`。
 - 页面和公开 JSON 不包含账号、邮箱、API key、组织 ID、原始 prompt、本机路径、session path、workspace path、内部项目名。
 - 成本字段第一版不展示，公开 JSON 中可为 `null`。
-- 测试用例 TUD-001 至 TUD-015 有对应自动化或明确手工验证记录。
+- 浏览器刷新 `/usage` 时读取部署目录中的最新 `data/token-usage.json`，token 数据更新不依赖重新构建或重启 Next 服务。
+- 测试用例 TUD-001 至 TUD-016 有对应自动化或明确手工验证记录。
 
 ## 7.1 验证记录
 
-验证日期：2026-06-22。
+验证日期：2026-06-25。
 
 已通过命令：
 
@@ -395,10 +397,10 @@ npm run verify
 覆盖结果：
 
 - `validate:data`：公开 JSON schema、计算口径和隐私边界通过。
-- `test`：TUD-001 至 TUD-014 自动化测试通过。
+- `test`：TUD-001 至 TUD-019 自动化测试通过。
 - `typecheck`：TypeScript 严格检查通过。
-- `build`：Next.js 生产构建通过，首页静态预渲染成功。
-- `scan:public`：TUD-015 公开构建产物隐私扫描通过，扫描 56 个公开 artifact。
+- `build`：Next.js 生产构建通过，`/` 和 `/usage` 标记为动态服务端渲染。
+- `scan:public`：TUD-015 公开构建产物隐私扫描通过，扫描 110 个公开 artifact。
 
 部署验证：
 

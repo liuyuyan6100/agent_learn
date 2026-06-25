@@ -1,13 +1,13 @@
 [Unit]
-Description=Refresh Agent Learn token usage data
+Description=Collect daily Agent candidates from Lark messages
 After=network-online.target
 Wants=network-online.target
 ConditionPathExists=/home/ubuntu/tool/agent_learn/package.json
 
 [Service]
 Type=oneshot
+User=ubuntu
 Environment=NEXT_TELEMETRY_DISABLED=1
 Environment=AGENT_LEARN_SOURCE_DIR=/home/ubuntu/tool/agent_learn
-Environment=AGENT_LEARN_DEPLOY_DIR=/opt/agent-learn
-Environment=AGENT_LEARN_RUN_USER=ubuntu
-ExecStart=/home/ubuntu/tool/agent_learn/scripts/refresh-token-dashboard.sh
+Environment=AGENT_LEARN_STATE_DIR=/var/lib/agent-learn
+ExecStart=/usr/bin/env bash -lc 'cd "$AGENT_LEARN_SOURCE_DIR" && npm run collect:lark-agent-candidates'
